@@ -6,7 +6,7 @@ VERILOGDEST=../qsys_ip/MMRingBuffer
 all: $(VERILOGDEST) $(VERILOGDEST)/mkMMRingBuffer.v $(VERILOGDEST)/mkMMRingBufferSink.v $(VERILOGDEST)/mkMMRingBufferSource.v
 
 $(VERILOGDEST):
-	mkdir $(VERILOGDEST)
+	mkdir -p $(VERILOGDEST)
 	cp RingBuffer*.tcl $(VERILOGDEST)
 
 $(VERILOGDEST)/mkMMRingBuffer.v: MMRingBuffer.bsv
