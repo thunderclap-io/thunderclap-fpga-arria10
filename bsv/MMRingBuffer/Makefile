@@ -18,6 +18,11 @@ $(VERILOGDEST)/mkMMRingBufferSink.v: MMRingBuffer.bsv
 $(VERILOGDEST)/mkMMRingBufferSource.v: MMRingBuffer.bsv
 	$(BSC) $(BSCFLAGS) -vdir $(VERILOGDEST) -u -verilog -g mkMMRingBufferSource MMRingBuffer.bsv
 
+test:
+	$(BSC) $(BSCFLAGS) -u -sim -g mkMMRingBufferTB MMRingBufferTB.bsv
+	$(BSC) $(BSCFLAGS) -e mkMMRingBufferTB -sim -o mkMMRingBufferTB -g mkMMRingBufferTB 
+#	./sim
+
 .PHONY: clean
 clean:
 	rm -f  *.bi *.bo *.ba *.info *.sched *.h *.o *.so $(VERILOGDEST)/mkMMRingBuffer.v $(VERILOGDEST)/mkMMRingBufferSink.v *~  >/dev/null
