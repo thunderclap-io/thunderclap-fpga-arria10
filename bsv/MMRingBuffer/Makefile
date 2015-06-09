@@ -18,9 +18,15 @@ $(VERILOGDEST)/mkMMRingBufferSink.v: MMRingBuffer.bsv
 $(VERILOGDEST)/mkMMRingBufferSource.v: MMRingBuffer.bsv
 	$(BSC) $(BSCFLAGS) -vdir $(VERILOGDEST) -u -verilog -g mkMMRingBufferSource MMRingBuffer.bsv
 
-test:
+ringtest:
 	$(BSC) $(BSCFLAGS) -u -sim -g mkMMRingBufferTB MMRingBufferTB.bsv
 	$(BSC) $(BSCFLAGS) -e mkMMRingBufferTB -sim -o mkMMRingBufferTB -g mkMMRingBufferTB 
+
+sttest:
+	$(BSC) $(BSCFLAGS) -u -sim -g mkAvalonSinkTB AvalonSTTB.bsv
+	$(BSC) $(BSCFLAGS) -e mkAvalonSinkTB -sim -o mkAvalonSinkTB -g mkAvalonSinkTB 
+	$(BSC) $(BSCFLAGS) -u -sim -g mkAvalonSourceTB AvalonSTTB.bsv
+	$(BSC) $(BSCFLAGS) -e mkAvalonSourceTB -sim -o mkAvalonSourceTB -g mkAvalonSourceTB 
 #	./sim
 
 .PHONY: clean
