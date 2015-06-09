@@ -29,6 +29,14 @@ sttest:
 	$(BSC) $(BSCFLAGS) -e mkAvalonSourceTB -sim -o mkAvalonSourceTB -g mkAvalonSourceTB 
 #	./sim
 
+$(VERILOGDEST)/mkAvalonSinkPCIe.v: AvalonST.bsv
+	$(BSC) $(BSCFLAGS) -vdir $(VERILOGDEST) -u -verilog -g mkAvalonSinkPCIe AvalonST.bsv
+
+$(VERILOGDEST)/mkAvalonSourcePCIe.v: AvalonST.bsv
+	$(BSC) $(BSCFLAGS) -vdir $(VERILOGDEST) -u -verilog -g mkAvalonSourcePCIe AvalonST.bsv
+
+
+
 .PHONY: clean
 clean:
 	rm -f  *.bi *.bo *.ba *.info *.sched *.h *.o *.so $(VERILOGDEST)/mkMMRingBuffer.v $(VERILOGDEST)/mkMMRingBufferSink.v *~  >/dev/null

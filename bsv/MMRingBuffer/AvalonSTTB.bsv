@@ -7,21 +7,11 @@ endinterface
 
 //typedef Bit#(64) PCIeWord;
 
-typedef struct {
-    Bit#(8)     be;
-    Bit#(8)     parity;
-    Bit#(8)     bar;
-    Bool        sop;
-    Bool        eop;
-    Bit#(64)    data;
-//    Bit#(22)    pad;
-} PCIeWord deriving (Bits, Eq);
-
 
 
 module mkAvalonSinkTB(AvalonSTTB);
 //    MMRingBufferSink tbsink <- mkMMRingBufferSink;
-    AvalonSink#(PCIeWord) sink <- mkAvalonSink;
+    AvalonSinkPCIe sink <- mkAvalonSinkPCIe;
     Reg#(Int#(32)) tick <- mkReg(0);
 //   MMRingBufferSource source <- mkMMRingBufferSource;
 
@@ -42,7 +32,7 @@ module mkAvalonSinkTB(AvalonSTTB);
         invalue.sop = False;
         invalue.eop = False; 
 //        sink.asi.asi(data, False, False, False, 8'hff, 8'h00);
-        sink.asi.asi(invalue, True);
+        sink.asi.asi(invalue.data, True, invalue.sop, invalue.eop, invalue.be, invalue.parity, invalue.bar);
 
         $display("%d: Input", tick);
         //$display("asi_ready = %d", tbsink.sink.asi_ready());
@@ -62,7 +52,7 @@ endmodule
 
 module mkAvalonSourceTB(AvalonSTTB);
 //    MMRingBufferSink tbsink <- mkMMRingBufferSink;
-    AvalonSource#(PCIeWord) source <- mkAvalonSource;
+    AvalonSourcePCIe source <- mkAvalonSourcePCIe;
     Reg#(Int#(32)) tick <- mkReg(0);
 //   MMRingBufferSource source <- mkMMRingBufferSource;
 
@@ -80,7 +70,7 @@ module mkAvalonSourceTB(AvalonSTTB);
 
     rule source_out;
 //        sink.asi.asi(data, False, False, False, 8'hff, 8'h00);
-        PCIeWord dataout = source.aso.aso_data();
+        Bit#(64) dataout = source.aso.aso_data();
 
         $display("%x: Output word %x", tick, pack(dataout));
         //$display("asi_ready = %d", tbsink.sink.asi_ready());

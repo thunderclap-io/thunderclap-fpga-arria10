@@ -30,11 +30,22 @@ package AvalonST;
 import GetPut::*;
 import FIFOF::*;
 
+typedef struct {
+    Bit#(8)     be;
+    Bit#(8)     parity;
+    Bit#(8)     bar;
+    Bool        sop;
+    Bool        eop;
+    Bit#(64)    data;
+//    Bit#(22)    pad;
+} PCIeWord deriving (Bits, Eq);
+
+
 
 (* always_ready, always_enabled *)
-interface AvalonSourceExt#(type dataT);
+interface AvalonSourceExtPCIe;
   method Action aso(Bool ready);
-  method dataT aso_data;
+  method Bit#(64) aso_data;
   method Bool aso_valid;
   method Bool aso_sop;
   method Bool aso_eop;
@@ -43,62 +54,37 @@ interface AvalonSourceExt#(type dataT);
   method Bit#(8) aso_bar;
 endinterface
 
-interface AvalonSource#(type dataT);
-  interface AvalonSourceExt#(dataT) aso;
-  interface Put#(dataT) send;
+interface AvalonSourcePCIe;
+  interface AvalonSourceExtPCIe aso;
+  interface Put#(PCIeWord) send;
 endinterface
 
-typedef struct {
-	Bit#(16)	magic;
-	Bit#(8)		be;
-	Bit#(8)		parity;
-	Bit#(8)		bar;
-	Bool		sop;
-	Bool		eop;
-	Bit#(22)	pad;
-} StatusWord deriving (Bits, Eq);
 
-/*
-function Bit#(64) packStatus(Bool sop, Bool eop, Bit#(8) be, Bit#(8) parity, Bit#(8) bar);
-	Bit#(64) statusWord = (64'hc0de << 52) | (extend(bar)<<24) | (extend(parity)<<16) |
-		(extend(be)<<8) | (extend(pack(eop))<<1) | (extend(pack(sop)));
-	return statusWord;
-endfunction
-*/
+module mkAvalonSourcePCIe(AvalonSourcePCIe);
+//provisos(Bits#(PCIeWord,dataWidth));
 
-module mkAvalonSource(AvalonSource#(dataT))
-provisos(Bits#(dataT,dataWidth),
-	Add#(unused, 64, dataWidth));
-
-  Wire#(Maybe#(dataT)) data <- mkDWire(Invalid);
-//  Wire#(Maybe#(Bit#(64))) status <- mkDWire(Invalid);
+  Wire#(Maybe#(PCIeWord)) data <- mkDWire(Invalid);
   PulseWire isReady <- mkPulseWire;
 
-  Reg#(StatusWord) statusLatched <- mkReg(unpack(0));
-
-
-  interface AvalonSourceExt aso;
+  interface AvalonSourceExtPCIe aso;
     method Action aso(ready);
       if (ready) begin
         isReady.send();
       end
     endmethod
-    method aso_data = fromMaybe(?,data);
-    method aso_sop = statusLatched.sop;
-    method aso_eop = statusLatched.sop;
-    method aso_parity = statusLatched.parity;
-    method aso_be = statusLatched.be;
-    method aso_bar = statusLatched.bar;
+
+    method aso_data = fromMaybe(?,data).data;
     method aso_valid = isValid(data);
+    method aso_sop = fromMaybe(?,data).sop;
+    method aso_eop = fromMaybe(?,data).eop;
+    method aso_bar = fromMaybe(?,data).bar;
+    method aso_be = fromMaybe(?,data).be;
+    method aso_parity = fromMaybe(?,data).parity;
   endinterface
 
   interface Put send;
     method Action put(x) if (isReady);
-      StatusWord status = unpack(truncate(pack(x)));
-      if (status.magic == 16'hc0de)
-	statusLatched <= status;
-      else
-        data <= Valid(x);
+      data <= Valid(x);
     endmethod
   endinterface
 
@@ -106,50 +92,36 @@ endmodule
 
 
 (* always_ready, always_enabled *)
-interface AvalonSinkExt#(type dataT);
-  method Action asi(dataT data, Bool valid, Bool sop, Bool eop, Bit#(8) be, Bit#(8) parity);
+interface AvalonSinkExtPCIe;
+  method Action asi(Bit#(64) data, Bool valid, Bool sop, Bool eop, Bit#(8) be, Bit#(8) parity, Bit#(8) bar);
   method Bool asi_ready;
 endinterface
 
-interface AvalonSink#(type dataT);
-  interface AvalonSinkExt#(dataT) asi;
-  interface Get#(dataT) receive;
+interface AvalonSinkPCIe;
+  interface AvalonSinkExtPCIe asi;
+  interface Get#(PCIeWord) receive;
 endinterface
 
 
-module mkAvalonSink(AvalonSink#(dataT))
-provisos(Bits#(dataT,64));
-//	 Add#(0,dataWidth,64));
-//	 Min#(dataWidth,64,64));
+module mkAvalonSinkPCIe(AvalonSinkPCIe);
 //provisos(Bits#(dataT,dataWidth));
 
-  FIFOF#(dataT) queue <- mkGLFIFOF(True,False);
-  Reg#(StatusWord) statusBuffer <- mkReg(unpack(0));
-  Reg#(Bool) statusEnqueued <- mkReg(False);
+  FIFOF#(PCIeWord) queue <- mkGLFIFOF(True,False);
 
-  interface AvalonSinkExt asi;
-    method Action asi(data,valid,sop,eop,be,parity);
-	StatusWord status;
-	status.sop = sop;
-	status.eop = eop;
-	status.be  = be;
-	status.parity = parity;
-	status.magic = 16'hc0de;
-	status.bar = 0;
-	status.pad = 22'h0;
-//      let statusPacked = extend(pack(status));
-      if (statusEnqueued && queue.notFull) begin
-	queue.enq(unpack(truncate(pack(statusBuffer))));
-	statusEnqueued <= False;
-      end
-      else if (valid && queue.notFull) begin
-        queue.enq(data);
-	statusBuffer <= status;
-	statusEnqueued <= True;
-//		queue.enq(unpack(truncate(pack(status))));
+  interface AvalonSinkExtPCIe asi;
+    method Action asi(data,valid,sop,eop,be,parity,bar);
+      if (valid && queue.notFull) begin
+        PCIeWord tfr;
+        tfr.data = data;
+        tfr.sop = sop;
+        tfr.eop = eop;
+        tfr.be = be;
+        tfr.parity = parity;
+        tfr.bar = bar;
+        queue.enq(tfr);
       end
     endmethod
-    method asi_ready = queue.notFull && (!statusEnqueued);
+    method asi_ready = queue.notFull;
   endinterface
 
   interface receive = toGet(queue);
