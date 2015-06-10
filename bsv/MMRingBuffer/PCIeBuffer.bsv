@@ -51,14 +51,45 @@ endinterface: PCIePacketReceiver
 module mkPCIePacketReceiver(PCIePacketReceiver);
     AvalonSinkPCIe streamToFIFO <- mkAvalonSinkPCIe;
     AvalonSlave#(DataType, AddressType, BurstWidth, ByteEnable) slave <- mkAvalonSlave;
+    Reg#(PCIeWord) currentpcieword <- mkReg(unpack(0));
+    Reg#(Bool) next <- mkReg(True);
 
     rule serviceMMSlave;
         AvalonMMRequest#(DataType, AddressType, BurstWidth, ByteEnable) req <- slave.client.request.get();
         $display("request");
+        if (req matches tagged AvalonRead { address:.address, byteenable:.be, burstcount:.burstcount})
+        begin
+            $display("read %x",address);
+            case (address)
+                0:  begin
+                        $display("trigger pcieword=%x", currentpcieword); 
+                        next <= True;
+                    end
+//                1:
+//                2:
+//                3:
+            endcase
+        end
+        else if (req matches tagged AvalonWrite{ writedata:.data, address:.address, byteenable:.be, burstcount:.burstcount})
+            $display("write %x",address);
+//        $display("address=%x", address);
+
+    endrule
+
+    rule fetchpcieword if (next);
+        let pcieword <- streamToFIFO.receive.get();
+        currentpcieword <= pcieword;
+        $display("PCIe word %x arrived", pcieword);
+        next <= False;
+    endrule
+
+    rule nextprint;
+        $display("next=%d",next);
     endrule
 
     interface streamSink = streamToFIFO.asi;
     interface mmSlave = slave.avs;
+
 
 endmodule
 
@@ -112,7 +143,7 @@ module mkPCIePacketReceiverTB(PCIePacketReceiverTB);
     rule read;
 //        AvalonMMRequest#(DataType, AddressType, BurstWidth, ByteEnable) req =
 //            tagged AvalonRead { address:8'h12, byteenable:1 };
-        dut.mmSlave.avs(32'hdeadbeef, 8'h12, reading, False, 1, 0);
+        dut.mmSlave.avs(32'hdeadbeef, extend(pack(tick)[3:1]), reading, False, 1, 0);
         reading <= !reading;
         if (reading)
             $display("%d: read request", tick);
