@@ -27,6 +27,10 @@ sttest:
 	$(BSC) $(BSCFLAGS) -e mkAvalonSinkTB -sim -o mkAvalonSinkTB -g mkAvalonSinkTB 
 	$(BSC) $(BSCFLAGS) -u -sim -g mkAvalonSourceTB AvalonSTTB.bsv
 	$(BSC) $(BSCFLAGS) -e mkAvalonSourceTB -sim -o mkAvalonSourceTB -g mkAvalonSourceTB 
+
+pcietest:
+	$(BSC) $(BSCFLAGS) -u -sim -g mkPCIePacketReceiverTB PCIeBuffer.bsv
+	$(BSC) $(BSCFLAGS) -e mkPCIePacketReceiverTB -sim -o mkPCIePacketReceiverTB -g mkPCIePacketReceiverTB 
 #	./sim
 
 $(VERILOGDEST)/mkAvalonSinkPCIe.v: AvalonST.bsv
