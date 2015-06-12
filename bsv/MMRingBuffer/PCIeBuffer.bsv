@@ -56,16 +56,26 @@ module mkPCIePacketReceiver(PCIePacketReceiver);
 
     rule serviceMMSlave;
         AvalonMMRequest#(DataType, AddressType, BurstWidth, ByteEnable) req <- slave.client.request.get();
+        AvalonMMResponse#(DataType) response = 32'hdeadbeef;
         $display("request");
         if (req matches tagged AvalonRead { address:.address, byteenable:.be, burstcount:.burstcount})
         begin
             $display("read %x",address);
             case (address)
                 0:  begin
+                        response = currentpcieword.data[31:0];
+                        slave.client.response.put(response);
                         $display("trigger pcieword=%x", currentpcieword); 
                         next <= True;
                     end
-//                1:
+                1:  begin
+                        response = currentpcieword.data[63:32];
+                        slave.client.response.put(response);
+                    end
+                2:  begin
+                        response = {6'b0, pack(currentpcieword.eop), pack(currentpcieword.sop), currentpcieword.be, currentpcieword.parity,  currentpcieword.bar};
+                        slave.client.response.put(response);
+                    end
 //                2:
 //                3:
             endcase
@@ -126,7 +136,7 @@ module mkPCIePacketReceiverTB(PCIePacketReceiverTB);
         invalue.be = 8'hff;
         invalue.parity = 0;
         invalue.bar = 0;
-        invalue.sop = False;
+        invalue.sop = True;
         invalue.eop = False; 
 //        sink.asi.asi(data, False, False, False, 8'hff, 8'h00);
         dut.streamSink.asi(invalue.data, True, invalue.sop, invalue.eop, invalue.be, invalue.parity, invalue.bar);
@@ -150,7 +160,7 @@ module mkPCIePacketReceiverTB(PCIePacketReceiverTB);
     endrule
 
     rule readdata if (dut.mmSlave.avs_readdatavalid);
-        $display("%d: read response", tick);
+        $display("%d: read response %x", tick, dut.mmSlave.avs_readdata());
     endrule
 
 //    rule sink_out;
