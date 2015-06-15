@@ -36,6 +36,7 @@ import AvalonMM::*;
 import GetPut::*;
 import ClientServer::*;
 import Connectable::*;
+import FIFOF::*;
 
 
 typedef Bit#(32) DataType;
@@ -53,6 +54,7 @@ module mkPCIePacketReceiver(PCIePacketReceiver);
     AvalonSlave#(DataType, AddressType, BurstWidth, ByteEnable) slave <- mkAvalonSlave;
     Reg#(PCIeWord) currentpcieword <- mkReg(unpack(0));
     Reg#(Bool) next <- mkReg(True);
+    FIFOF#(PCIeWord) rxfifo <- mkSizedFIFOF(2);
 
     rule serviceMMSlave;
         AvalonMMRequest#(DataType, AddressType, BurstWidth, ByteEnable) req <- slave.client.request.get();
@@ -63,21 +65,21 @@ module mkPCIePacketReceiver(PCIePacketReceiver);
             $display("read %x",address);
             case (address)
                 0:  begin
-                        response = currentpcieword.data[31:0];
+                        response = rxfifo.first().data[31:0];
                         slave.client.response.put(response);
-                        $display("trigger pcieword=%x", currentpcieword); 
-                        next <= True;
+                        $display("trigger pcieword=%x", rxfifo.first()); 
+                        rxfifo.deq();
                     end
                 1:  begin
-                        response = currentpcieword.data[63:32];
+                        response = rxfifo.first().data[63:32];
                         slave.client.response.put(response);
                     end
                 2:  begin
-                        response = {6'b0, pack(currentpcieword.eop), pack(currentpcieword.sop), currentpcieword.be, currentpcieword.parity,  currentpcieword.bar};
+                        response = {6'b0, pack(rxfifo.first().eop), pack(rxfifo.first().sop), rxfifo.first().be, rxfifo.first().parity,  rxfifo.first().bar};
                         slave.client.response.put(response);
                     end
                 3:  begin
-                        response = signExtend(pack(!next));
+                        response = signExtend(pack(rxfifo.notEmpty));
                         slave.client.response.put(response);
                     end
             endcase
@@ -88,15 +90,21 @@ module mkPCIePacketReceiver(PCIePacketReceiver);
 
     endrule
 
-    rule fetchpcieword if (next);
-        let pcieword <- streamToFIFO.receive.get();
-        currentpcieword <= pcieword;
-        $display("PCIe word %x arrived", pcieword);
+    rule fetchpcieword;
+        let pciedata <- streamToFIFO.receive.get();
+        //currentpcieword <= pcieword;
+        if (rxfifo.notFull)
+        begin
+            rxfifo.enq(pciedata);
+            $display("PCIe word %x arrived", pciedata);
+        end else begin
+            $display("junked");
+        end
         next <= False;
     endrule
 
     rule nextprint;
-        $display("next=%d",next);
+        $display("next=%d, rxfifo.empty=%d",next, !rxfifo.notEmpty());
     endrule
 
     interface streamSink = streamToFIFO.asi;
@@ -156,7 +164,7 @@ module mkPCIePacketReceiverTB(PCIePacketReceiverTB);
     rule read;
 //        AvalonMMRequest#(DataType, AddressType, BurstWidth, ByteEnable) req =
 //            tagged AvalonRead { address:8'h12, byteenable:1 };
-        Bit#(8) address = extend(pack(tick)[4:2]);
+        Bit#(8) address = extend(pack(tick)[5:3]);
         dut.mmSlave.avs(32'hdeadbeef, address, reading, False, 1, 0);
         reading <= !reading;
         if (reading)
