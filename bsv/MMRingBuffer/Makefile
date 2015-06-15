@@ -3,11 +3,12 @@ LIBS=../../
 BSCFLAGS=-keep-fires -cross-info -aggressive-conditions -p +:$(LIBS)
 VERILOGDEST=../qsys_ip/MMRingBuffer
 
-all: $(VERILOGDEST) $(VERILOGDEST)/mkMMRingBuffer.v $(VERILOGDEST)/mkMMRingBufferSink.v $(VERILOGDEST)/mkMMRingBufferSource.v
+#all: $(VERILOGDEST) $(VERILOGDEST)/mkMMRingBuffer.v $(VERILOGDEST)/mkMMRingBufferSink.v $(VERILOGDEST)/mkMMRingBufferSource.v
+all: $(VERILOGDEST) $(VERILOGDEST)/mkPCIePacketReceiver.v
 
 $(VERILOGDEST):
 	mkdir -p $(VERILOGDEST)
-	cp RingBuffer*.tcl $(VERILOGDEST)
+	cp *.tcl $(VERILOGDEST)
 
 $(VERILOGDEST)/mkMMRingBuffer.v: MMRingBuffer.bsv
 	$(BSC) $(BSCFLAGS) -vdir $(VERILOGDEST) -u -verilog -g mkMMRingBuffer MMRingBuffer.bsv
@@ -17,6 +18,9 @@ $(VERILOGDEST)/mkMMRingBufferSink.v: MMRingBuffer.bsv
 
 $(VERILOGDEST)/mkMMRingBufferSource.v: MMRingBuffer.bsv
 	$(BSC) $(BSCFLAGS) -vdir $(VERILOGDEST) -u -verilog -g mkMMRingBufferSource MMRingBuffer.bsv
+
+$(VERILOGDEST)/mkPCIePacketReceiver.v: PCIeBuffer.bsv
+	$(BSC) $(BSCFLAGS) -vdir $(VERILOGDEST) -u -verilog -g mkPCIePacketReceiver PCIeBuffer.bsv
 
 ringtest:
 	$(BSC) $(BSCFLAGS) -u -sim -g mkMMRingBufferTB MMRingBufferTB.bsv
@@ -43,5 +47,5 @@ $(VERILOGDEST)/mkAvalonSourcePCIe.v: AvalonST.bsv
 
 .PHONY: clean
 clean:
-	rm -f  *.bi *.bo *.ba *.info *.sched *.h *.o *.so $(VERILOGDEST)/mkMMRingBuffer.v $(VERILOGDEST)/mkMMRingBufferSink.v *~  >/dev/null
+	rm -f  *.bi *.bo *.ba *.info *.sched *.h *.o *.so $(VERILOGDEST)/mk*.v *~  >/dev/null
 	rm -rf $(VERILOGDEST)

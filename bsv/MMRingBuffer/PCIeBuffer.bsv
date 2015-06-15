@@ -76,8 +76,10 @@ module mkPCIePacketReceiver(PCIePacketReceiver);
                         response = {6'b0, pack(currentpcieword.eop), pack(currentpcieword.sop), currentpcieword.be, currentpcieword.parity,  currentpcieword.bar};
                         slave.client.response.put(response);
                     end
-//                2:
-//                3:
+                3:  begin
+                        response = signExtend(pack(!next));
+                        slave.client.response.put(response);
+                    end
             endcase
         end
         else if (req matches tagged AvalonWrite{ writedata:.data, address:.address, byteenable:.be, burstcount:.burstcount})
@@ -141,8 +143,9 @@ module mkPCIePacketReceiverTB(PCIePacketReceiverTB);
 //        sink.asi.asi(data, False, False, False, 8'hff, 8'h00);
         dut.streamSink.asi(invalue.data, True, invalue.sop, invalue.eop, invalue.be, invalue.parity, invalue.bar);
 
-        $display("%d: Input", tick);
-        //$display("asi_ready = %d", tbsink.sink.asi_ready());
+        $display("%d: asi_ready = %d", tick, dut.streamSink.asi_ready());
+        if (dut.streamSink.asi_ready)
+            $display("%d: Input", tick);
     endrule
 
     rule ready;
@@ -153,10 +156,11 @@ module mkPCIePacketReceiverTB(PCIePacketReceiverTB);
     rule read;
 //        AvalonMMRequest#(DataType, AddressType, BurstWidth, ByteEnable) req =
 //            tagged AvalonRead { address:8'h12, byteenable:1 };
-        dut.mmSlave.avs(32'hdeadbeef, extend(pack(tick)[3:1]), reading, False, 1, 0);
+        Bit#(8) address = extend(pack(tick)[4:2]);
+        dut.mmSlave.avs(32'hdeadbeef, address, reading, False, 1, 0);
         reading <= !reading;
         if (reading)
-            $display("%d: read request", tick);
+            $display("%d: read request addr %x", tick,address);
     endrule
 
     rule readdata if (dut.mmSlave.avs_readdatavalid);
