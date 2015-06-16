@@ -54,7 +54,7 @@ module mkPCIePacketReceiver(PCIePacketReceiver);
     AvalonSlave#(DataType, AddressType, BurstWidth, ByteEnable) slave <- mkAvalonSlave;
     Reg#(PCIeWord) currentpcieword <- mkReg(unpack(0));
     Reg#(Bool) next <- mkReg(True);
-    FIFOF#(PCIeWord) rxfifo <- mkSizedFIFOF(2);
+    FIFOF#(PCIeWord) rxfifo <- mkSizedFIFOF(64);
 
     rule serviceMMSlave;
         AvalonMMRequest#(DataType, AddressType, BurstWidth, ByteEnable) req <- slave.client.request.get();
@@ -66,24 +66,22 @@ module mkPCIePacketReceiver(PCIePacketReceiver);
             case (address)
                 0:  begin
                         response = rxfifo.first().data[31:0];
-                        slave.client.response.put(response);
                         $display("trigger pcieword=%x", rxfifo.first()); 
                         rxfifo.deq();
                     end
                 1:  begin
                         response = rxfifo.first().data[63:32];
-                        slave.client.response.put(response);
                     end
                 2:  begin
                         response = {6'b0, pack(rxfifo.first().eop), pack(rxfifo.first().sop), rxfifo.first().be, rxfifo.first().parity,  rxfifo.first().bar};
-                        slave.client.response.put(response);
                     end
                 3:  begin
                         response = signExtend(pack(rxfifo.notEmpty));
-                        slave.client.response.put(response);
                     end
             endcase
+        slave.client.response.put(response);
         end
+
         else if (req matches tagged AvalonWrite{ writedata:.data, address:.address, byteenable:.be, burstcount:.burstcount})
             $display("write %x",address);
 //        $display("address=%x", address);
