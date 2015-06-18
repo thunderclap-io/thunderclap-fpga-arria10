@@ -19,8 +19,11 @@ $(VERILOGDEST)/mkMMRingBufferSink.v: MMRingBuffer.bsv
 $(VERILOGDEST)/mkMMRingBufferSource.v: MMRingBuffer.bsv
 	$(BSC) $(BSCFLAGS) -vdir $(VERILOGDEST) -u -verilog -g mkMMRingBufferSource MMRingBuffer.bsv
 
-$(VERILOGDEST)/mkPCIePacketReceiver.v: PCIeBuffer.bsv
-	$(BSC) $(BSCFLAGS) -vdir $(VERILOGDEST) -u -verilog -g mkPCIePacketReceiver PCIeBuffer.bsv
+$(VERILOGDEST)/mkPCIePacketReceiver.v: PCIePacketReceiver.bsv
+	$(BSC) $(BSCFLAGS) -vdir $(VERILOGDEST) -u -verilog -g mkPCIePacketReceiver PCIePacketReceiver.bsv
+
+$(VERILOGDEST)/mkPCIePacketTransmitter.v: PCIePacketTransmitter.bsv
+	$(BSC) $(BSCFLAGS) -vdir $(VERILOGDEST) -u -verilog -g mkPCIePacketTransmitter PCIePacketTransmitter.bsv
 
 ringtest:
 	$(BSC) $(BSCFLAGS) -u -sim -g mkMMRingBufferTB MMRingBufferTB.bsv
