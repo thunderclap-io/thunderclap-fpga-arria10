@@ -4,7 +4,7 @@ BSCFLAGS=-keep-fires -cross-info -aggressive-conditions -p +:$(LIBS)
 VERILOGDEST=../qsys_ip/MMRingBuffer
 
 #all: $(VERILOGDEST) $(VERILOGDEST)/mkMMRingBuffer.v $(VERILOGDEST)/mkMMRingBufferSink.v $(VERILOGDEST)/mkMMRingBufferSource.v
-all: $(VERILOGDEST) $(VERILOGDEST)/mkPCIePacketReceiver.v
+all: $(VERILOGDEST) $(VERILOGDEST)/mkPCIePacketReceiver.v $(VERILOGDEST)/mkPCIePacketTransmitter.v
 
 $(VERILOGDEST):
 	mkdir -p $(VERILOGDEST)
