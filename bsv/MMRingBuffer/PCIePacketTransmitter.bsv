@@ -60,7 +60,8 @@ module mkPCIePacketTransmitter(PCIePacketTransmitter);
     AvalonSourcePCIe fifoToStream <- mkAvalonSourcePCIe;
     AvalonSlave#(DataType, AddressType, BurstWidth, ByteEnable) slave <- mkAvalonSlave;
     Reg#(PCIeWord) currentpcieword <- mkReg(unpack(0));
-    Reg#(Bool) next <- mkReg(True);
+//    Reg#(Bool) next <- mkReg(True);
+    Reg#(Bool) go <- mkReg(False);
     FIFOF#(PCIeWord) txfifo <- mkUGSizedFIFOF(64);
 
     rule serviceMMSlave;
@@ -91,6 +92,7 @@ module mkPCIePacketTransmitter(PCIePacketTransmitter);
                         amendedWord.eop = unpack(req.AvalonWrite.writedata[25]);
                     end
                 3:  begin
+			go <= unpack(req.AvalonWrite.writedata[0]);
                     end
             endcase
         currentpcieword <= amendedWord;
@@ -107,7 +109,7 @@ module mkPCIePacketTransmitter(PCIePacketTransmitter);
     endrule
 
     rule sendpcieword;
-        if (txfifo.notEmpty)
+        if (txfifo.notEmpty && go)
         begin
             let pciedata = txfifo.first();
             txfifo.deq();
@@ -117,7 +119,7 @@ module mkPCIePacketTransmitter(PCIePacketTransmitter);
     endrule
 
     rule nextprint;
-        $display("next=%d, txfifo.empty=%d, txfifo.full=%d",next, !txfifo.notEmpty(), !txfifo.notFull());
+        $display("go=%d, txfifo.empty=%d, txfifo.full=%d",go, !txfifo.notEmpty(), !txfifo.notFull());
     endrule
 
     interface streamSource = fifoToStream.aso;
