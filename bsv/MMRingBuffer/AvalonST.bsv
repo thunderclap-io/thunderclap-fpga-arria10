@@ -52,6 +52,7 @@ interface AvalonSourceExtPCIe;
   method Bit#(8) aso_be;
   method Bit#(8) aso_parity;
   method Bit#(8) aso_bar;
+  method Bool aso_err;
 endinterface
 
 interface AvalonSourcePCIe;
@@ -80,6 +81,7 @@ module mkAvalonSourcePCIe(AvalonSourcePCIe);
     method aso_bar = fromMaybe(?,data).bar;
     method aso_be = fromMaybe(?,data).be;
     method aso_parity = fromMaybe(?,data).parity;
+    method aso_err = False;
   endinterface
 
   interface Put send;
