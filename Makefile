@@ -368,7 +368,7 @@ restore_originals:
 
 .PHONY : cleanq
 cleanq:
-	rm -f  $(QSYS_GENERATED_FILES)
+#	rm -f  $(QSYS_GENERATED_FILES)
 	rm -rf $(QSYS_SYNTHESIS_DIR)
 	rm -rf $(QUARTUS_GENERATED_DIRS)
 	rm -f  dtb.hex $(QUARTUS_PROJECT).dtb
