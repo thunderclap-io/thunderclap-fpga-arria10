@@ -153,44 +153,44 @@ add_interface_port avalon_streaming_sink streamSink_asi_ready ready Output 1
 # 
 # connection point conduit_bar
 # 
-#add_interface conduit_bar conduit end
-#set_interface_property conduit_bar associatedClock clock
-#set_interface_property conduit_bar associatedReset reset_sink
-#set_interface_property conduit_bar ENABLED true
-#set_interface_property conduit_bar EXPORT_OF ""
-#set_interface_property conduit_bar PORT_NAME_MAP ""
-#set_interface_property conduit_bar CMSIS_SVD_VARIABLES ""
-#set_interface_property conduit_bar SVD_ADDRESS_GROUP ""
-#
-#add_interface_port conduit_bar streamSink_asi_bar bar Input 8
+add_interface conduit_bar conduit end
+set_interface_property conduit_bar associatedClock clock
+set_interface_property conduit_bar associatedReset reset_sink
+set_interface_property conduit_bar ENABLED true
+set_interface_property conduit_bar EXPORT_OF ""
+set_interface_property conduit_bar PORT_NAME_MAP ""
+set_interface_property conduit_bar CMSIS_SVD_VARIABLES ""
+set_interface_property conduit_bar SVD_ADDRESS_GROUP ""
+
+add_interface_port conduit_bar streamSink_asi_bar bar Input 8
 
 
 # 
 # connection point conduit_be
 # 
-#add_interface conduit_be conduit end
-#set_interface_property conduit_be associatedClock clock
-#set_interface_property conduit_be associatedReset reset_sink
-#set_interface_property conduit_be ENABLED true
-#set_interface_property conduit_be EXPORT_OF ""
-#set_interface_property conduit_be PORT_NAME_MAP ""
-#set_interface_property conduit_be CMSIS_SVD_VARIABLES ""
-#set_interface_property conduit_be SVD_ADDRESS_GROUP ""
+add_interface conduit_be conduit end
+set_interface_property conduit_be associatedClock clock
+set_interface_property conduit_be associatedReset reset_sink
+set_interface_property conduit_be ENABLED true
+set_interface_property conduit_be EXPORT_OF ""
+set_interface_property conduit_be PORT_NAME_MAP ""
+set_interface_property conduit_be CMSIS_SVD_VARIABLES ""
+set_interface_property conduit_be SVD_ADDRESS_GROUP ""
 
-#add_interface_port conduit_be streamSink_asi_be be Input 8
+add_interface_port conduit_be streamSink_asi_be be Input 8
 
 
 # 
 # connection point conduit_parity
 # 
-#add_interface conduit_parity conduit end
-#set_interface_property conduit_parity associatedClock clock
-#set_interface_property conduit_parity associatedReset reset_sink
-#set_interface_property conduit_parity ENABLED true
-#set_interface_property conduit_parity EXPORT_OF ""
-#set_interface_property conduit_parity PORT_NAME_MAP ""
-#set_interface_property conduit_parity CMSIS_SVD_VARIABLES ""
-#set_interface_property conduit_parity SVD_ADDRESS_GROUP ""
+add_interface conduit_parity conduit end
+set_interface_property conduit_parity associatedClock clock
+set_interface_property conduit_parity associatedReset reset_sink
+set_interface_property conduit_parity ENABLED true
+set_interface_property conduit_parity EXPORT_OF ""
+set_interface_property conduit_parity PORT_NAME_MAP ""
+set_interface_property conduit_parity CMSIS_SVD_VARIABLES ""
+set_interface_property conduit_parity SVD_ADDRESS_GROUP ""
 
-#add_interface_port conduit_parity streamSink_asi_parity parity Input 8
+add_interface_port conduit_parity streamSink_asi_parity parity Input 8
 
