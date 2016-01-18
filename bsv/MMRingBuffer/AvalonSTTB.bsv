@@ -1,6 +1,7 @@
 //import MMRingBuffer::*;
-import AvalonST::*;
+import AvalonSTPCIe::*;
 import GetPut::*;
+import PCIE::*;
 
 interface AvalonSTTB;
 endinterface
@@ -27,12 +28,13 @@ module mkAvalonSinkTB(AvalonSTTB);
         PCIeWord invalue;
         invalue.data = extend(pack(tick));
         invalue.be = 8'hff;
-        invalue.parity = 0;
-        invalue.bar = 0;
-        invalue.sop = False;
-        invalue.eop = False; 
+        //invalue.parity = 0;
+        //invalue.bar = 0;
+	invalue.hit = 0;
+        invalue.sof = False;
+        invalue.eof = False; 
 //        sink.asi.asi(data, False, False, False, 8'hff, 8'h00);
-        sink.asi.asi(invalue.data, True, invalue.sop, invalue.eop, invalue.be, invalue.parity, invalue.bar);
+        sink.asi.asi(invalue.data, True, invalue.sof, invalue.eof, invalue.be, 0, 0);
 
         $display("%d: Input", tick);
         //$display("asi_ready = %d", tbsink.sink.asi_ready());
@@ -81,10 +83,11 @@ module mkAvalonSourceTB(AvalonSTTB);
         PCIeWord invalue;
         invalue.data = extend(pack(tick));
         invalue.be = 8'hff;
-        invalue.parity = 0;
-        invalue.bar = 0;
-        invalue.sop = False;
-        invalue.eop = False; 
+        //invalue.parity = 0;
+        //invalue.bar = 0;
+	invalue.hit = 0;
+        invalue.sof = False;
+        invalue.eof = False; 
 
         source.send.put(invalue);
         $display("%d: put %x", tick, pack(invalue));
