@@ -31,13 +31,13 @@
  */
 // PCIePacketTx.bsv
 
-import AvalonST::*;
+import AvalonSTPCIe::*;
 import AvalonMM::*;
 import GetPut::*;
 import ClientServer::*;
 import Connectable::*;
 import FIFOF::*;
-
+import PCIE::*;
 
 typedef Bit#(32) DataType;
 typedef Bit#(8) AddressType;
@@ -85,11 +85,12 @@ module mkPCIePacketTransmitter(PCIePacketTransmitter);
                         amendedWord.data[63:32] = req.AvalonWrite.writedata;
                     end
                 2:  begin
-                        amendedWord.bar = req.AvalonWrite.writedata[7:0];
-                        amendedWord.parity = req.AvalonWrite.writedata[15:8];
+                        //amendedWord.bar = req.AvalonWrite.writedata[7:0];
+                        //amendedWord.parity = req.AvalonWrite.writedata[15:8];
                         amendedWord.be = req.AvalonWrite.writedata[23:16];
-                        amendedWord.sop = unpack(req.AvalonWrite.writedata[24]);
-                        amendedWord.eop = unpack(req.AvalonWrite.writedata[25]);
+                        amendedWord.sof = unpack(req.AvalonWrite.writedata[24]);
+                        amendedWord.eof = unpack(req.AvalonWrite.writedata[25]);
+			amendedWord.hit = 0;
                     end
                 3:  begin
 			go <= unpack(req.AvalonWrite.writedata[0]);
@@ -177,8 +178,9 @@ module mkPCIePacketTransmitterTB(PCIePacketTransmitterTB);
             dut.streamSource.aso_eop,
             dut.streamSource.aso_sop,
             dut.streamSource.aso_be,
-            dut.streamSource.aso_parity,
-            dut.streamSource.aso_bar);
+		0, 0);
+//            dut.streamSource.aso_parity,
+//            dut.streamSource.aso_bar);
     endrule
 
     rule source_enable;
