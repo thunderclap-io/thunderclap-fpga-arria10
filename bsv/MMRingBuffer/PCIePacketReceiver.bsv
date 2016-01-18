@@ -31,13 +31,13 @@
  */
 // PCIeBuffer.bsv
 
-import AvalonST::*;
+import AvalonSTPCIe::*;
 import AvalonMM::*;
 import GetPut::*;
 import ClientServer::*;
 import Connectable::*;
 import FIFOF::*;
-
+import PCIE::*;
 
 typedef Bit#(32) DataType;
 typedef Bit#(8) AddressType;
@@ -74,7 +74,7 @@ module mkPCIePacketReceiver(PCIePacketReceiver);
                         response = rxfifo.first().data[63:32];
                     end
                 2:  begin
-                        response = {6'b0, pack(rxfifo.first().eop), pack(rxfifo.first().sop), rxfifo.first().be, rxfifo.first().parity,  rxfifo.first().bar};
+                        response = {6'b0, pack(rxfifo.first().eof), pack(rxfifo.first().sof), rxfifo.first().be, 8'b0, 8'b0}; //rxfifo.first().parity,  rxfifo.first().bar};
                     end
                 3:  begin
                         response = signExtend(pack(rxfifo.notEmpty));
@@ -143,12 +143,13 @@ module mkPCIePacketReceiverTB(PCIePacketReceiverTB);
         PCIeWord invalue;
         invalue.data = extend(pack(tick));
         invalue.be = 8'hff;
-        invalue.parity = 0;
-        invalue.bar = 0;
-        invalue.sop = True;
-        invalue.eop = False; 
+	invalue.hit = 0;
+        //invalue.parity = 0;
+        //invalue.bar = 0;
+        invalue.sof = True;
+        invalue.eof = False; 
 //        sink.asi.asi(data, False, False, False, 8'hff, 8'h00);
-        dut.streamSink.asi(invalue.data, True, invalue.sop, invalue.eop, invalue.be, invalue.parity, invalue.bar);
+        dut.streamSink.asi(invalue.data, True, invalue.sof, invalue.eof, invalue.be, 0, 0); //invalue.parity, invalue.bar);
 
         $display("%d: asi_ready = %d", tick, dut.streamSink.asi_ready());
         if (dut.streamSink.asi_ready)
