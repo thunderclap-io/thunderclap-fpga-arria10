@@ -25,11 +25,13 @@
  * @BERI_LICENSE_HEADER_END@
  */
 
-package AvalonST;
+package AvalonSTPCIe;
 
 import GetPut::*;
 import FIFOF::*;
+import PCIE::*;
 
+/*
 typedef struct {
     Bit#(8)     be;
     Bit#(8)     parity;
@@ -39,7 +41,9 @@ typedef struct {
     Bit#(64)    data;
 //    Bit#(22)    pad;
 } PCIeWord deriving (Bits, Eq);
+*/
 
+typedef TLPData#(8) PCIeWord;
 
 
 (* always_ready, always_enabled *)
@@ -76,11 +80,11 @@ module mkAvalonSourcePCIe(AvalonSourcePCIe);
 
     method aso_data = fromMaybe(?,data).data;
     method aso_valid = isValid(data);
-    method aso_sop = fromMaybe(?,data).sop;
-    method aso_eop = fromMaybe(?,data).eop;
-    method aso_bar = fromMaybe(?,data).bar;
+    method aso_sop = fromMaybe(?,data).sof;
+    method aso_eop = fromMaybe(?,data).eof;
+    method aso_bar = 0; //fromMaybe(?,data).bar;
     method aso_be = fromMaybe(?,data).be;
-    method aso_parity = fromMaybe(?,data).parity;
+    method aso_parity = 0; //fromMaybe(?,data).parity;
     method aso_err = False;
   endinterface
 
@@ -115,11 +119,12 @@ module mkAvalonSinkPCIe(AvalonSinkPCIe);
       if (valid && queue.notFull) begin
         PCIeWord tfr;
         tfr.data = data;
-        tfr.sop = sop;
-        tfr.eop = eop;
+        tfr.sof = sop;
+        tfr.eof = eop;
         tfr.be = be;
-        tfr.parity = parity;
-        tfr.bar = bar;
+        //tfr.parity = parity;
+        //tfr.bar = bar;
+	tfr.hit = 0; // unused Xilinx-ism
         queue.enq(tfr);
       end
     endmethod
