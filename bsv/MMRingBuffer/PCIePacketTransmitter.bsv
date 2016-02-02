@@ -39,7 +39,7 @@ import Connectable::*;
 import FIFOF::*;
 import PCIE::*;
 
-typedef Bit#(32) DataType;
+typedef Bit#(64) DataType;
 typedef Bit#(8) AddressType;
 typedef 0 BurstWidth;
 typedef 1 ByteEnable;
@@ -66,7 +66,7 @@ module mkPCIePacketTransmitter(PCIePacketTransmitter);
 
     rule serviceMMSlave;
         AvalonMMRequest#(DataType, AddressType, BurstWidth, ByteEnable) req <- slave.client.request.get();
-        AvalonMMResponse#(DataType) response = 32'hcafecafe;
+        AvalonMMResponse#(DataType) response = 64'hdeadfacebeefcafe;
         PCIeWord amendedWord = currentpcieword;
         $display("request");
         if (req matches tagged AvalonWrite { address:.address, byteenable:.be, burstcount:.burstcount})
@@ -74,7 +74,7 @@ module mkPCIePacketTransmitter(PCIePacketTransmitter);
             $display("write %x",address);
             case (address)
                 0:  begin
-                        amendedWord.data[31:0] = req.AvalonWrite.writedata;
+                        amendedWord.data = req.AvalonWrite.writedata;
                         if (txfifo.notFull)
                         begin
                             txfifo.enq(amendedWord);
@@ -82,7 +82,7 @@ module mkPCIePacketTransmitter(PCIePacketTransmitter);
                         end
                     end
                 1:  begin
-                        amendedWord.data[63:32] = req.AvalonWrite.writedata;
+                        amendedWord.data = req.AvalonWrite.writedata;
                     end
                 2:  begin
                         //amendedWord.bar = req.AvalonWrite.writedata[7:0];
@@ -103,7 +103,7 @@ module mkPCIePacketTransmitter(PCIePacketTransmitter);
         else if (req matches tagged AvalonRead{ address:.address, byteenable:.be, burstcount:.burstcount})
             begin
                 $display("read %x",address);
-                slave.client.response.put(32'h00c0ffee);
+                slave.client.response.put(64'hfaceb00c00c0ffee);
             end
 //        $display("address=%x", address);
 
@@ -192,7 +192,7 @@ module mkPCIePacketTransmitterTB(PCIePacketTransmitterTB);
 //        AvalonMMRequest#(DataType, AddressType, BurstWidth, ByteEnable) req =
 //            tagged AvalonRead { address:8'h12, byteenable:1 };
         Bit#(8) address = extend(pack(tick)[5:3]);
-        dut.mmSlave.avs(32'h01234567, address, False, writing, 1, 0);
+        dut.mmSlave.avs(64'h0123456789abcdef, address, False, writing, 1, 0);
         writing <= !writing;
         if (writing)
             $display("%d: write request addr %x", tick,address);

@@ -39,7 +39,7 @@ import Connectable::*;
 import FIFOF::*;
 import PCIE::*;
 
-typedef Bit#(32) DataType;
+typedef Bit#(64) DataType;
 typedef Bit#(8) AddressType;
 typedef 0 BurstWidth;
 typedef 1 ByteEnable;
@@ -58,23 +58,24 @@ module mkPCIePacketReceiver(PCIePacketReceiver);
 
     rule serviceMMSlave;
         AvalonMMRequest#(DataType, AddressType, BurstWidth, ByteEnable) req <- slave.client.request.get();
-        AvalonMMResponse#(DataType) response = 32'hdeadbeef;
+        AvalonMMResponse#(DataType) response = 64'hdeadfacebeefcafe;
         $display("request");
         if (req matches tagged AvalonRead { address:.address, byteenable:.be, burstcount:.burstcount})
         begin
             $display("read %x",address);
             case (address)
                 0:  begin
-                        response = rxfifo.first().data[31:0];
+                        response = rxfifo.first().data;
                         $display("trigger pcieword=%x", rxfifo.first()); 
                         if (rxfifo.notEmpty)
                             rxfifo.deq();
                     end
                 1:  begin
-                        response = rxfifo.first().data[63:32];
+//                        response = rxfifo.first().data[63:32];
+                        response = rxfifo.first().data;
                     end
                 2:  begin
-                        response = {6'b0, pack(rxfifo.first().eof), pack(rxfifo.first().sof), rxfifo.first().be, 8'b0, 8'b0}; //rxfifo.first().parity,  rxfifo.first().bar};
+                        response = {38'b0, pack(rxfifo.first().eof), pack(rxfifo.first().sof), rxfifo.first().be, 8'b0, 8'b0}; //rxfifo.first().parity,  rxfifo.first().bar};
                     end
                 3:  begin
                         response = signExtend(pack(rxfifo.notEmpty));
@@ -127,7 +128,7 @@ module mkPCIePacketReceiverTB(PCIePacketReceiverTB);
 
     //mkConnection(master.avm, dut.mmSlave);
 
-    Reg#(Int#(32)) tick <- mkReg(0);
+    Reg#(Int#(64)) tick <- mkReg(0);
     Reg#(Bool) reading <- mkReg(False);
 //   MMRingBufferSource source <- mkMMRingBufferSource;
 
@@ -165,7 +166,7 @@ module mkPCIePacketReceiverTB(PCIePacketReceiverTB);
 //        AvalonMMRequest#(DataType, AddressType, BurstWidth, ByteEnable) req =
 //            tagged AvalonRead { address:8'h12, byteenable:1 };
         Bit#(8) address = extend(pack(tick)[5:3]);
-        dut.mmSlave.avs(32'hdeadbeef, address, reading, False, 1, 0);
+        dut.mmSlave.avs(64'hfaceb00cdeadbeef, address, reading, False, 1, 0);
         reading <= !reading;
         if (reading)
             $display("%d: read request addr %x", tick,address);
