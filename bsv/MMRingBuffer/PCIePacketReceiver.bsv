@@ -54,7 +54,7 @@ module mkPCIePacketReceiver(PCIePacketReceiver);
     AvalonSlave#(DataType, AddressType, BurstWidth, ByteEnable) slave <- mkAvalonSlave;
     Reg#(PCIeWord) currentpcieword <- mkReg(unpack(0));
     Reg#(Bool) next <- mkReg(True);
-    FIFOF#(PCIeWord) rxfifo <- mkUGSizedFIFOF(64);
+    FIFOF#(PCIeWord) rxfifo <- mkUGSizedFIFOF(1024);
 
     rule serviceMMSlave;
         AvalonMMRequest#(DataType, AddressType, BurstWidth, ByteEnable) req <- slave.client.request.get();
