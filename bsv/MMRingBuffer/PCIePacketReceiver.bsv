@@ -76,7 +76,8 @@ module mkPCIePacketReceiver(PCIePacketReceiver);
                     end
                 2:  begin
 //                        response = {38'b0, pack(rxfifo.first().eof), pack(rxfifo.first().sof), rxfifo.first().be, 8'b0, 8'b0}; //rxfifo.first().parity,  rxfifo.first().bar};
-                        response = {rxfifo.first().eof ? 8'hEE:8'h0, rxfifo.first().sof ? 8'h55:8'h0, 24'b0, rxfifo.first().be, 8'b0, 8'b0}; //rxfifo.first().parity,  rxfifo.first().bar};
+                        response = {rxfifo.first().eof ? 8'hEE:8'h0, rxfifo.first().sof ? 8'h55:8'h0, 22'b0,
+				pack(rxfifo.first().eof), pack(rxfifo.first().sof), rxfifo.first().be, 8'b0, 8'b0}; //rxfifo.first().parity,  rxfifo.first().bar};
                     end
                 3:  begin
                         response = signExtend(pack(rxfifo.notEmpty));
