@@ -38,38 +38,12 @@ import ClientServer::*;
 import Connectable::*;
 import FIFOF::*;
 import PCIE::*;
+import PCIeByteSwap::*;
 
 typedef Bit#(64) DataType;
 typedef Bit#(8) AddressType;
 typedef 0 BurstWidth;
 typedef 1 ByteEnable;
-
-function DataType byteSwap(DataType in);
-	DataType out;
-	out[7:0] = in[63:56];
-	out[15:8] = in[55:48];
-	out[23:16] = in[47:40];
-	out[31:24] = in[39:32];
-	out[39:32] = in[31:24];
-	out[47:40] = in[23:16];
-	out[55:48] = in[15:8];
-	out[63:56] = in[7:0];
-	return out;
-endfunction
-
-function DataType wordSwap(DataType in);
-	 DataType out;
-	 out[63:32] = in[31:0];
-	 out[31:0]  = in[63:32];
-	 return out;
-endfunction
-
-function DataType rxWord1Swap(DataType in);
-	 DataType out;
-	 out[63:32] = in[31:0];
-	 out[31:0]  = {in[39:32], in[47:40], in[55:48], in[63:56]};
-	 return out; 
-endfunction
 
 
 interface PCIePacketReceiver;
@@ -89,7 +63,8 @@ module mkPCIePacketReceiver(PCIePacketReceiver);
 
     rule serviceMMSlave;
         AvalonMMRequest#(DataType, AddressType, BurstWidth, ByteEnable) req <- slave.client.request.get();
-        AvalonMMResponse#(DataType) response = 64'hdeadfacebeefcafe;
+        AvalonMMResponse#(DataType) responseWrapped = 64'hfeeb1ec0ffeefeed;
+	DataType response = 64'hdeadfacebeefcafe;
         $display("request");
         if (req matches tagged AvalonRead { address:.address, byteenable:.be, burstcount:.burstcount})
         begin
@@ -114,7 +89,8 @@ module mkPCIePacketReceiver(PCIePacketReceiver);
                         response = signExtend(pack(rxfifo.notEmpty));
                     end
             endcase
-        slave.client.response.put(byteSwap(response));
+	responseWrapped = byteSwap64(response);	// convert from a data word into a response packet
+        slave.client.response.put(byteSwap64(responseWrapped));
         end
 
         else if (req matches tagged AvalonWrite{ writedata:.data, address:.address, byteenable:.be, burstcount:.burstcount})
@@ -154,7 +130,7 @@ module mkPCIePacketReceiver(PCIePacketReceiver);
 			end
 		   end
 		default: begin
-			 pciedataSwapped.data = byteSwap(pciedataUnswapped.data);
+			 pciedataSwapped.data = byteSwap64(pciedataUnswapped.data);
 		   end
 	   endcase
 	end
