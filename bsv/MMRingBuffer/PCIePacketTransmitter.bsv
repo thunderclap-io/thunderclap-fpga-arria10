@@ -38,24 +38,13 @@ import ClientServer::*;
 import Connectable::*;
 import FIFOF::*;
 import PCIE::*;
+import PCIeByteSwap::*;
 
 typedef Bit#(64) DataType;
 typedef Bit#(8) AddressType;
 typedef 0 BurstWidth;
 typedef 1 ByteEnable;
 
-function DataType byteSwap(DataType in);
-        DataType out;
-        out[7:0] = in[63:56];
-        out[15:8] = in[55:48];
-        out[23:16] = in[47:40];
-        out[31:24] = in[39:32];
-        out[39:32] = in[31:24];
-        out[47:40] = in[23:16];
-        out[55:48] = in[15:8];
-        out[63:56] = in[7:0];
-        return out;
-endfunction
 
 interface PCIePacketTransmitter;
     interface AvalonSourceExtPCIe streamSource;
@@ -76,6 +65,8 @@ module mkPCIePacketTransmitter(PCIePacketTransmitter);
 //    Reg#(Bool) next <- mkReg(True);
     Reg#(Bool) go <- mkReg(False);
     FIFOF#(PCIeWord) txfifo <- mkUGSizedFIFOF(64);
+    Reg#(Bool) fourDWord <- mkReg(True);
+    Reg#(UInt#(10)) dwordCounter <- mkReg(10'h0);
 
     rule serviceMMSlave;
         AvalonMMRequest#(DataType, AddressType, BurstWidth, ByteEnable) req <- slave.client.request.get();
@@ -84,10 +75,11 @@ module mkPCIePacketTransmitter(PCIePacketTransmitter);
         $display("request");
         if (req matches tagged AvalonWrite { address:.address, byteenable:.be, burstcount:.burstcount})
         begin
+	    DataType writedataBERI = byteSwap64(req.AvalonWrite.writedata);
             $display("write %x",address);
             case (address)
                 0:  begin
-                        amendedWord.data = req.AvalonWrite.writedata;
+                        amendedWord.data = writedataBERI;
                         if (txfifo.notFull)
                         begin
                             txfifo.enq(amendedWord);
@@ -95,28 +87,29 @@ module mkPCIePacketTransmitter(PCIePacketTransmitter);
                         end
                     end
                 1:  begin
-                        amendedWord.data = req.AvalonWrite.writedata;
+                        amendedWord.data = writedataBERI;
                     end
                 2:  begin
-                        //amendedWord.bar = req.AvalonWrite.writedata[7:0];
-                        //amendedWord.parity = req.AvalonWrite.writedata[15:8];
-                        amendedWord.be = req.AvalonWrite.writedata[23:16];
-                        amendedWord.sof = unpack(req.AvalonWrite.writedata[24]);
-                        amendedWord.eof = unpack(req.AvalonWrite.writedata[25]);
+                        //amendedWord.bar = writedataBERI[7:0];
+                        //amendedWord.parity = writedataBERI[15:8];
+                        amendedWord.be = writedataBERI[23:16];
+                        amendedWord.sof = unpack(writedataBERI[24]);
+                        amendedWord.eof = unpack(writedataBERI[25]);
 			amendedWord.hit = 0;
+			$display("Framing bits written: sofreg=%d, eofreg=%d, bereg=%x", amendedWord.sof, amendedWord.eof, amendedWord.be);
                     end
                 3:  begin
-			go <= unpack(req.AvalonWrite.writedata[0]);
+			go <= unpack(writedataBERI[0]);
                     end
             endcase
         currentpcieword <= amendedWord;
-        slave.client.response.put(byteSwap(response));
+        slave.client.response.put(response);
         end
 
         else if (req matches tagged AvalonRead{ address:.address, byteenable:.be, burstcount:.burstcount})
             begin
                 $display("read %x",address);
-                slave.client.response.put(byteSwap(64'hfaceb00c00c0ffee));
+                slave.client.response.put(byteSwap64(64'hfaceb00c00c0ffee));
             end
 //        $display("address=%x", address);
 
@@ -125,10 +118,54 @@ module mkPCIePacketTransmitter(PCIePacketTransmitter);
     rule sendpcieword;
         if (txfifo.notEmpty && go)
         begin
-            let pciedata = txfifo.first();
+            PCIeWord pciedataUnswapped = txfifo.first();
             txfifo.deq();
-            fifoToStream.send.put(pciedata);
-            $display("PCIe word %x sent", pciedata);
+
+	    PCIeWord pciedataSwapped;
+
+	    pciedataSwapped.sof = pciedataUnswapped.sof;
+	    pciedataSwapped.eof = pciedataUnswapped.eof;
+	    pciedataSwapped.hit = pciedataUnswapped.hit;
+
+	    // header fields have a different byteswapping from data fields
+	    // the length of the header can be either 3 or 4 dwords, and the start
+	    // of data can change based on whether it is Q-word (16 byte) aligned or not 
+
+	    // we need to know whether the TLP is a 3 or 4 D-word TLP from 64-bit dword 0
+	    // to decide how to byteswap dword 1
+	    if (pciedataUnswapped.sof)
+	    begin // first word, so make a note of packet format
+	       Bool fourDWordNext = unpack(pciedataUnswapped.data[29]);
+    	       fourDWord <= fourDWordNext;
+	       dwordCounter <= 1;
+	       pciedataSwapped.data = wordSwap(pciedataUnswapped.data);
+	       $display("PCIe packet start, dwordCounter=%d, fourDWord (this packet)=%d", dwordCounter, fourDWordNext);
+	    end else begin
+	       dwordCounter <= dwordCounter + 1;
+	       case (dwordCounter)	      // count words beginning at the second (ie the mixed header/data dword)
+		    1: begin	      // if a 3 dword TLP, have to apply data swap and header swap on each half
+			    if (fourDWord) begin // else a straight header swap
+			       pciedataSwapped.data = wordSwap(pciedataUnswapped.data); // header swap
+    			       $display("Header word 2/3 swap");
+			    end else begin
+			       pciedataSwapped.data = txWord1Swap(pciedataUnswapped.data); // mixed swap
+    			       $display("Header word 2/data word 0 swap");
+			    end
+		       end
+		    default: begin
+			     pciedataSwapped.data = byteSwap64(pciedataUnswapped.data);
+    			     $display("Data swap");
+		       end
+	       endcase
+	    end
+
+	    // in all data words the byte enables are reversed, and they are ignore for header words.
+	    // so swap them assuming they're always data
+	    pciedataSwapped.be = reverseBits(pciedataUnswapped.be);	   	
+
+
+            fifoToStream.send.put(pciedataSwapped);
+            $display("PCIe word[%d] received from MM=%x, sent swapped=%x", dwordCounter, pciedataUnswapped, pciedataSwapped);
         end
     endrule
 
@@ -153,6 +190,7 @@ module mkPCIePacketTransmitterTB(PCIePacketTransmitterTB);
     //mkConnection(master.avm, dut.mmSlave);
 
     Reg#(Int#(32)) tick <- mkReg(0);
+    Reg#(Int#(10)) wordCounter <- mkReg(0);
     Reg#(Bool) writing <- mkReg(False);
 //   MMRingBufferSource source <- mkMMRingBufferSource;
 
@@ -163,28 +201,7 @@ module mkPCIePacketTransmitterTB(PCIePacketTransmitterTB);
     rule ticktock;
         tick <= tick + 1;
     endrule
-/*
-    rule sink_in;
-        PCIeWord invalue;
-        invalue.data = extend(pack(tick));
-        invalue.be = 8'hff;
-        invalue.parity = 0;
-        invalue.bar = 0;
-        invalue.sop = True;
-        invalue.eop = False; 
-//        sink.asi.asi(data, False, False, False, 8'hff, 8'h00);
-        dut.streamSink.asi(invalue.data, True, invalue.sop, invalue.eop, invalue.be, invalue.parity, invalue.bar);
 
-        $display("%d: asi_ready = %d", tick, dut.streamSink.asi_ready());
-        if (dut.streamSink.asi_ready)
-            $display("%d: Input", tick);
-    endrule
-
-    rule ready;
-        Bool ready = dut.streamSink.asi_ready();
-        $display("%d: Ready = %d", tick, ready);
-    endrule
-*/
     rule source_out if (dut.streamSource.aso_valid);
         $display("%d: stream out data=%x, eop=%d, sop=%d, be=%x, parity=%x, bar=%x", tick,
             dut.streamSource.aso_data,
@@ -204,11 +221,31 @@ module mkPCIePacketTransmitterTB(PCIePacketTransmitterTB);
     rule write;
 //        AvalonMMRequest#(DataType, AddressType, BurstWidth, ByteEnable) req =
 //            tagged AvalonRead { address:8'h12, byteenable:1 };
-        Bit#(8) address = extend(pack(tick)[5:3]);
-        dut.mmSlave.avs(64'h0123456789abcdef, address, False, writing, 1, 0);
+
+        Bit#(8) address = extend(pack(tick)[3:1]);
+
+	// count 8 words in a packet, but only count the words we actually wrote data,
+	// not the ones where our sequential register writes hit something else
+	Int#(10) wordCounterNext = (wordCounter==8) ? 0:((address==0 && writing) ? wordCounter+1:wordCounter);
+	wordCounter <= wordCounterNext;
+
+	Bit#(64) data = 64'h0123456789abcdef ^ zeroExtend(pack(tick));
+	Bool sof = (wordCounter == 0);
+	Bool eof = (wordCounter == 3);
+	Bit#(8) be = 8'h7b;
+	if (address == 2) begin
+	   data[24] = pack(sof);
+	   data[25] = pack(eof);
+	   data[23:16] = be;
+	end
+	if (address == 3) begin
+	   data[0] = 1;
+	end
+        dut.mmSlave.avs(byteSwap64(data), address, False, writing, 1, 0);
         writing <= !writing;
         if (writing)
-            $display("%d: write request addr %x", tick,address);
+            $display("%d: write request addr %x, BERI data=%x, avalon data=%x, sopin=%x, eopin=%x, bein=%x, wordCounter=%d",
+	    		  tick,address, data, byteSwap64(data), sof, eof, be, wordCounter);
     endrule
 
     rule readdata if (dut.mmSlave.avs_readdatavalid);
