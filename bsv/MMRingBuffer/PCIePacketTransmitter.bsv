@@ -44,6 +44,19 @@ typedef Bit#(8) AddressType;
 typedef 0 BurstWidth;
 typedef 1 ByteEnable;
 
+function DataType byteSwap(DataType in);
+        DataType out;
+        out[7:0] = in[63:56];
+        out[15:8] = in[55:48];
+        out[23:16] = in[47:40];
+        out[31:24] = in[39:32];
+        out[39:32] = in[31:24];
+        out[47:40] = in[23:16];
+        out[55:48] = in[15:8];
+        out[63:56] = in[7:0];
+        return out;
+endfunction
+
 interface PCIePacketTransmitter;
     interface AvalonSourceExtPCIe streamSource;
     interface AvalonSlaveExt#(DataType, AddressType, BurstWidth, ByteEnable) mmSlave;
@@ -97,13 +110,13 @@ module mkPCIePacketTransmitter(PCIePacketTransmitter);
                     end
             endcase
         currentpcieword <= amendedWord;
-        slave.client.response.put(response);
+        slave.client.response.put(byteSwap(response));
         end
 
         else if (req matches tagged AvalonRead{ address:.address, byteenable:.be, burstcount:.burstcount})
             begin
                 $display("read %x",address);
-                slave.client.response.put(64'hfaceb00c00c0ffee);
+                slave.client.response.put(byteSwap(64'hfaceb00c00c0ffee));
             end
 //        $display("address=%x", address);
 
