@@ -57,6 +57,20 @@ function DataType byteSwap(DataType in);
 	return out;
 endfunction
 
+function DataType wordSwap(DataType in);
+	 DataType out;
+	 out[63:32] = in[31:0];
+	 out[31:0]  = in[63:32];
+	 return out;
+endfunction
+
+function DataType rxWord1Swap(DataType in);
+	 DataType out;
+	 out[63:32] = in[31:0];
+	 out[31:0]  = {in[39:32], in[47:40], in[55:48], in[63:56]};
+	 return out; 
+endfunction
+
 
 interface PCIePacketReceiver;
     interface AvalonSinkExtPCIe streamSink;
@@ -69,6 +83,9 @@ module mkPCIePacketReceiver(PCIePacketReceiver);
     Reg#(PCIeWord) currentpcieword <- mkReg(unpack(0));
     Reg#(Bool) next <- mkReg(True);
     FIFOF#(PCIeWord) rxfifo <- mkUGSizedFIFOF(1024);
+    Reg#(Bool) fourDWord <- mkReg(True);
+    Reg#(UInt#(10)) dwordCounter <- mkReg(10'h0);
+
 
     rule serviceMMSlave;
         AvalonMMRequest#(DataType, AddressType, BurstWidth, ByteEnable) req <- slave.client.request.get();
@@ -107,12 +124,51 @@ module mkPCIePacketReceiver(PCIePacketReceiver);
     endrule
 
     rule fetchpcieword;
-        let pciedata <- streamToFIFO.receive.get();
-        //currentpcieword <= pcieword;
+        PCIeWord pciedataUnswapped <- streamToFIFO.receive.get();
+	PCIeWord pciedataSwapped;
+
+	pciedataSwapped.sof = pciedataUnswapped.sof;
+	pciedataSwapped.eof = pciedataUnswapped.eof;
+	pciedataSwapped.hit = pciedataUnswapped.hit;
+
+	// header fields have a different byteswapping from data fields
+	// the length of the header can be either 3 or 4 dwords, and the start
+	// of data can change based on whether it is Q-word (16 byte) aligned or not 
+
+	// we need to know whether the TLP is a 3 or 4 D-word TLP from 64-bit dword 0
+	// to decide how to byteswap dword 1
+	if (pciedataUnswapped.sof)
+	begin // first word, so make a note of packet format
+	   fourDWord <= unpack(pciedataUnswapped.data[29]);
+	   dwordCounter <= 1;
+	   pciedataSwapped.data = wordSwap(pciedataUnswapped.data);
+	   $display("PCIe packet start, dwordCounter=%d, fourDWord=%d", dwordCounter, fourDWord);
+	end else begin
+	   dwordCounter <= dwordCounter + 1;
+	   case (dwordCounter)	      // count words beginning at the second (ie the mixed header/data dword)
+	   	1: begin	      // if a 3 dword TLP, have to apply data swap and header swap on each half
+			if (fourDWord) begin // else a straight header swap
+			   pciedataSwapped.data = wordSwap(pciedataUnswapped.data); // header swap
+			end else begin
+			   pciedataSwapped.data = rxWord1Swap(pciedataUnswapped.data); // mixed swap
+			end
+		   end
+		default: begin
+			 pciedataSwapped.data = byteSwap(pciedataUnswapped.data);
+		   end
+	   endcase
+	end
+
+	// in all data words the byte enables are reversed, and they are ignore for header words.
+	// so swap them assuming they're always data
+	pciedataSwapped.be = reverseBits(pciedataUnswapped.be);	   	
+
         if (rxfifo.notFull)
         begin
-            rxfifo.enq(pciedata);
-            $display("PCIe word %x arrived", pciedata);
+            rxfifo.enq(pciedataSwapped);
+            $display("PCIe word[%d] arrived as %x, swapped into %x, 4DWordTLP=%x, sof=%d, eof=%d, be.in=%x, be.swapped=%x",
+	    	dwordCounter, pciedataUnswapped, pciedataSwapped, fourDWord,
+		pciedataUnswapped.sof, pciedataUnswapped.eof, pciedataUnswapped.be, pciedataSwapped.be);
         end else begin
             $display("junked");
         end
@@ -145,6 +201,7 @@ module mkPCIePacketReceiverTB(PCIePacketReceiverTB);
     //mkConnection(master.avm, dut.mmSlave);
 
     Reg#(Int#(64)) tick <- mkReg(0);
+    Reg#(Int#(10)) wordCounter <- mkReg(0);
     Reg#(Bool) reading <- mkReg(False);
 //   MMRingBufferSource source <- mkMMRingBufferSource;
 
@@ -158,19 +215,21 @@ module mkPCIePacketReceiverTB(PCIePacketReceiverTB);
 
     rule sink_in;
         PCIeWord invalue;
-        invalue.data = extend(pack(tick));
-        invalue.be = 8'hff;
+        invalue.data = extend(pack(tick)) ^ 64'h01234567A9ABCDEF;
+        invalue.be = pack(tick)[12:5];
 	invalue.hit = 0;
         //invalue.parity = 0;
         //invalue.bar = 0;
-        invalue.sof = True;
+	Int#(10) wordCounterNext = (wordCounter==8) ? 0:wordCounter+1;
+	wordCounter <= wordCounterNext;
+	invalue.sof = (wordCounterNext == 0);
         invalue.eof = False; 
 //        sink.asi.asi(data, False, False, False, 8'hff, 8'h00);
         dut.streamSink.asi(invalue.data, True, invalue.sof, invalue.eof, invalue.be, 0, 0); //invalue.parity, invalue.bar);
 
         $display("%d: asi_ready = %d", tick, dut.streamSink.asi_ready());
         if (dut.streamSink.asi_ready)
-            $display("%d: Input", tick);
+            $display("%d: Input word %d", tick, wordCounter);
     endrule
 
     rule ready;
