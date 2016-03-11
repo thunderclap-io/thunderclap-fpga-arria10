@@ -75,11 +75,12 @@ module mkPCIePacketTransmitter(PCIePacketTransmitter);
         $display("request");
         if (req matches tagged AvalonWrite { address:.address, byteenable:.be, burstcount:.burstcount})
         begin
+	    // for words which we want to transfer verbatim from BERI, we have to 
 	    DataType writedataBERI = byteSwap64(req.AvalonWrite.writedata);
             $display("write %x",address);
             case (address)
                 0:  begin
-                        amendedWord.data = writedataBERI;
+                        amendedWord.data = req.AvalonWrite.writedata;
                         if (txfifo.notFull)
                         begin
                             txfifo.enq(amendedWord);
@@ -87,7 +88,7 @@ module mkPCIePacketTransmitter(PCIePacketTransmitter);
                         end
                     end
                 1:  begin
-                        amendedWord.data = writedataBERI;
+                        amendedWord.data = req.AvalonWrite.writedata;
                     end
                 2:  begin
                         //amendedWord.bar = writedataBERI[7:0];
@@ -138,22 +139,23 @@ module mkPCIePacketTransmitter(PCIePacketTransmitter);
 	       Bool fourDWordNext = unpack(pciedataUnswapped.data[29]);
     	       fourDWord <= fourDWordNext;
 	       dwordCounter <= 1;
-	       pciedataSwapped.data = wordSwap(pciedataUnswapped.data);
-	       $display("PCIe packet start, dwordCounter=%d, fourDWord (this packet)=%d", dwordCounter, fourDWordNext);
+	       pciedataSwapped.data = byteSwap32in64(pciedataUnswapped.data);
+	       $display("PCIe packet start, dwordCounter=%d, fourDWord (this packet)=%d, unswapped word 0 = %x", dwordCounter, fourDWordNext, pciedataUnswapped.data);
 	    end else begin
 	       dwordCounter <= dwordCounter + 1;
 	       case (dwordCounter)	      // count words beginning at the second (ie the mixed header/data dword)
 		    1: begin	      // if a 3 dword TLP, have to apply data swap and header swap on each half
 			    if (fourDWord) begin // else a straight header swap
-			       pciedataSwapped.data = wordSwap(pciedataUnswapped.data); // header swap
+			       pciedataSwapped.data = byteSwap32in64(pciedataUnswapped.data); // header swap
     			       $display("Header word 2/3 swap");
 			    end else begin
-			       pciedataSwapped.data = txWord1Swap(pciedataUnswapped.data); // mixed swap
+			       pciedataSwapped.data = byteSwapBottom32(pciedataUnswapped.data); // mixed swap
     			       $display("Header word 2/data word 0 swap");
 			    end
 		       end
 		    default: begin
-			     pciedataSwapped.data = byteSwap64(pciedataUnswapped.data);
+		    	     // no need to swap as Avalon and PCIe data are little endian
+			     pciedataSwapped.data = pciedataUnswapped.data;
     			     $display("Data swap");
 		       end
 	       endcase
@@ -161,7 +163,8 @@ module mkPCIePacketTransmitter(PCIePacketTransmitter);
 
 	    // in all data words the byte enables are reversed, and they are ignore for header words.
 	    // so swap them assuming they're always data
-	    pciedataSwapped.be = reverseBits(pciedataUnswapped.be);	   	
+	    //pciedataSwapped.be = reverseBits(pciedataUnswapped.be);
+	    pciedataSwapped.be = pciedataUnswapped.be;
 
 
             fifoToStream.send.put(pciedataSwapped);

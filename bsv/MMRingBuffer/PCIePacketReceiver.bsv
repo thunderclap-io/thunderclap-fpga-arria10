@@ -82,15 +82,15 @@ module mkPCIePacketReceiver(PCIePacketReceiver);
                     end
                 2:  begin
 //                        response = {38'b0, pack(rxfifo.first().eof), pack(rxfifo.first().sof), rxfifo.first().be, 8'b0, 8'b0}; //rxfifo.first().parity,  rxfifo.first().bar};
-                        response = {rxfifo.first().eof ? 8'hEE:8'h0, rxfifo.first().sof ? 8'h55:8'h0, 22'b0,
-				pack(rxfifo.first().eof), pack(rxfifo.first().sof), rxfifo.first().be, 8'b0, 8'b0}; //rxfifo.first().parity,  rxfifo.first().bar};
+                        response = byteSwap64({rxfifo.first().eof ? 8'hEE:8'h0, rxfifo.first().sof ? 8'h55:8'h0, 22'b0,
+				pack(rxfifo.first().eof), pack(rxfifo.first().sof), rxfifo.first().be, 8'b0, 8'b0}); //rxfifo.first().parity,  rxfifo.first().bar};
                     end
                 3:  begin
-                        response = signExtend(pack(rxfifo.notEmpty));
+                        response = byteSwap64(signExtend(pack(rxfifo.notEmpty)));
                     end
             endcase
-	responseWrapped = byteSwap64(response);	// convert from a data word into a response packet
-        slave.client.response.put(byteSwap64(responseWrapped));
+	responseWrapped = response;	// convert from a data word into a response packet
+        slave.client.response.put(responseWrapped);
         end
 
         else if (req matches tagged AvalonWrite{ writedata:.data, address:.address, byteenable:.be, burstcount:.burstcount})
@@ -117,27 +117,27 @@ module mkPCIePacketReceiver(PCIePacketReceiver);
 	begin // first word, so make a note of packet format
 	   fourDWord <= unpack(pciedataUnswapped.data[29]);
 	   dwordCounter <= 1;
-	   pciedataSwapped.data = wordSwap(pciedataUnswapped.data);
-	   $display("PCIe packet start, dwordCounter=%d, fourDWord=%d", dwordCounter, fourDWord);
+	   pciedataSwapped.data = byteSwap32in64(pciedataUnswapped.data);
+	   $display("PCIe packet start, dwordCounter=%d, fourDWord=%d, unswapped word 0 = %x", dwordCounter, fourDWord, pciedataUnswapped.data);
 	end else begin
 	   dwordCounter <= dwordCounter + 1;
 	   case (dwordCounter)	      // count words beginning at the second (ie the mixed header/data dword)
 	   	1: begin	      // if a 3 dword TLP, have to apply data swap and header swap on each half
 			if (fourDWord) begin // else a straight header swap
-			   pciedataSwapped.data = wordSwap(pciedataUnswapped.data); // header swap
+			   pciedataSwapped.data = byteSwap32in64(pciedataUnswapped.data); // header swap
 			end else begin
-			   pciedataSwapped.data = rxWord1Swap(pciedataUnswapped.data); // mixed swap
+			   pciedataSwapped.data = byteSwapBottom32(pciedataUnswapped.data); // mixed swap
 			end
 		   end
 		default: begin
-			 pciedataSwapped.data = byteSwap64(pciedataUnswapped.data);
+			 pciedataSwapped.data = pciedataUnswapped.data;
 		   end
 	   endcase
 	end
 
 	// in all data words the byte enables are reversed, and they are ignore for header words.
 	// so swap them assuming they're always data
-	pciedataSwapped.be = reverseBits(pciedataUnswapped.be);	   	
+	pciedataSwapped.be = pciedataUnswapped.be;
 
         if (rxfifo.notFull)
         begin
