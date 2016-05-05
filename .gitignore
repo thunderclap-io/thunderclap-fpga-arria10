@@ -7,3 +7,5 @@ incremental_db/
 *.ddb
 *.summary
 bsv/MMRingBuffer/*.v
+*.bo
+qsys_ip/
