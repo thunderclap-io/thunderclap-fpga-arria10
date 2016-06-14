@@ -18,7 +18,7 @@ QUARTUS_PROJECT_VERSION=PCIe_Fundamental
 QSYS_PROJECT=pcie_de_gen1_x4_ast64
 FPGA="Stratix V"
 # Version of Quartus this has been tested on:
-QUARTUS_VERSION?='15.1'
+QUARTUS_VERSION?='16.0'
 # User specific temporary area to avoid collisions
 TEMP=/tmp/$(USER)
 TMP=$(TEMP)
