@@ -1,5 +1,5 @@
 *~
-*.bsp
+#*.bsp
 *.rpt
 db/
 incremental_db/
