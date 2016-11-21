@@ -136,20 +136,23 @@ module mkPCIePacketTransmitter(PCIePacketTransmitter);
 	    // to decide how to byteswap dword 1
 	    if (pciedataUnswapped.sof)
 	    begin // first word, so make a note of packet format
-	       Bool fourDWordNext = unpack(pciedataUnswapped.data[29]);
+		// we think we receive words byte-swapped-within-64 from
+		// Avalon, so we have to look the 'fmt' bits in the twisted
+		// position
+	       Bool fourDWordNext = unpack(pciedataUnswapped.data[5]);
     	       fourDWord <= fourDWordNext;
 	       dwordCounter <= 1;
-	       pciedataSwapped.data = byteSwap32in64(pciedataUnswapped.data);
+	       pciedataSwapped.data = pciedataUnswapped.data; //byteSwap32in64(pciedataUnswapped.data);
 	       $display("PCIe packet start, dwordCounter=%d, fourDWord (this packet)=%d, unswapped word 0 = %x", dwordCounter, fourDWordNext, pciedataUnswapped.data);
 	    end else begin
 	       dwordCounter <= dwordCounter + 1;
 	       case (dwordCounter)	      // count words beginning at the second (ie the mixed header/data dword)
 		    1: begin	      // if a 3 dword TLP, have to apply data swap and header swap on each half
 			    if (fourDWord) begin // else a straight header swap
-			       pciedataSwapped.data = byteSwap32in64(pciedataUnswapped.data); // header swap
+			       pciedataSwapped.data = pciedataUnswapped.data; //byteSwap32in64(pciedataUnswapped.data); // header swap
     			       $display("Header word 2/3 swap");
 			    end else begin
-			       pciedataSwapped.data = byteSwapBottom32(pciedataUnswapped.data); // mixed swap
+			       pciedataSwapped.data = pciedataUnswapped.data; //byteSwapBottom32(pciedataUnswapped.data); // mixed swap
     			       $display("Header word 2/data word 0 swap");
 			    end
 		       end
