@@ -121,6 +121,30 @@
          type = "String";
       }
    }
+   element ghrd_10as066n2
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
+   element ghrd_10as066n2
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
+   element ghrd_10as066n2
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
    element hps_only_master
    {
       datum _sortIndex
@@ -1809,7 +1833,7 @@
   <parameter name="SYS_INFO_DEVICE" value="10AS066N3F40E2SGE2" />
   <parameter name="SYS_INFO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="SYS_INFO_DEVICE_SPEEDGRADE" value="2" />
-  <parameter name="SYS_INFO_UNIQUE_ID">$${FILENAME}_emif_a10_hps_0</parameter>
+  <parameter name="SYS_INFO_UNIQUE_ID">ghrd_10as066n2_emif_a10_hps_0</parameter>
   <parameter name="TRAIT_SUPPORTS_VID" value="0" />
  </module>
  <module
@@ -1875,7 +1899,7 @@
    version="17.1"
    enabled="1">
   <parameter name="allowInSystemMemoryContentEditor" value="false" />
-  <parameter name="autoInitializationFileName">$${FILENAME}_onchip_memory2_0</parameter>
+  <parameter name="autoInitializationFileName">ghrd_10as066n2_onchip_memory2_0</parameter>
   <parameter name="blockType" value="AUTO" />
   <parameter name="copyInitFile" value="false" />
   <parameter name="dataWidth" value="128" />
@@ -1931,10 +1955,10 @@
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_GENERATION_ID" value="0" />
-  <parameter name="AUTO_PCIE_EP_0_REFCLK_CLOCK_DOMAIN" value="8" />
+  <parameter name="AUTO_PCIE_EP_0_REFCLK_CLOCK_DOMAIN" value="10" />
   <parameter name="AUTO_PCIE_EP_0_REFCLK_CLOCK_RATE" value="0" />
-  <parameter name="AUTO_PCIE_EP_0_REFCLK_RESET_DOMAIN" value="8" />
-  <parameter name="AUTO_UNIQUE_ID">$${FILENAME}_pcie_tlp_buffer</parameter>
+  <parameter name="AUTO_PCIE_EP_0_REFCLK_RESET_DOMAIN" value="10" />
+  <parameter name="AUTO_UNIQUE_ID">ghrd_10as066n2_pcie_tlp_buffer</parameter>
  </module>
  <module
    name="reset_bridge_0"
