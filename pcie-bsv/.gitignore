@@ -1,0 +1,9 @@
+*~
+#*.bsp
+*.rpt
+db/
+incremental_db/
+*.smsg
+*.ddb
+*.summary
+bsv/MMRingBuffer/*.v
