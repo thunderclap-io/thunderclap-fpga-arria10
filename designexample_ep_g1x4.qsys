@@ -1,0 +1,967 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system name="$${FILENAME}">
+ <component
+   name="$${FILENAME}"
+   displayName="$${FILENAME}"
+   version="1.0"
+   description=""
+   tags=""
+   categories="System" />
+ <parameter name="bonusData"><![CDATA[bonusData 
+{
+   element APPS
+   {
+      datum _sortIndex
+      {
+         value = "1";
+         type = "int";
+      }
+   }
+   element DUT
+   {
+      datum _sortIndex
+      {
+         value = "2";
+         type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "1";
+         type = "boolean";
+      }
+   }
+   element clk_pld
+   {
+      datum _sortIndex
+      {
+         value = "0";
+         type = "int";
+      }
+   }
+   element clock_bridge_0
+   {
+      datum _sortIndex
+      {
+         value = "3";
+         type = "int";
+      }
+   }
+}
+]]></parameter>
+ <parameter name="clockCrossingAdapter" value="HANDSHAKE" />
+ <parameter name="device" value="10AS066N3F40E2SGE2" />
+ <parameter name="deviceFamily" value="Arria 10" />
+ <parameter name="deviceSpeedGrade" value="2" />
+ <parameter name="fabricMode" value="QSYS" />
+ <parameter name="generateLegacySim" value="false" />
+ <parameter name="generationId" value="0" />
+ <parameter name="globalResetBus" value="false" />
+ <parameter name="hdlLanguage" value="VERILOG" />
+ <parameter name="hideFromIPCatalog" value="false" />
+ <parameter name="lockedInterfaceDefinition" value="" />
+ <parameter name="maxAdditionalLatency" value="0" />
+ <parameter name="projectName" value="ghrd_10as066n2.qpf" />
+ <parameter name="sopcBorderPoints" value="false" />
+ <parameter name="systemHash" value="0" />
+ <parameter name="testBenchDutName" value="" />
+ <parameter name="timeStamp" value="0" />
+ <parameter name="useTestBenchNamingPattern" value="false" />
+ <instanceScript></instanceScript>
+ <interface name="apps_app_ctrl" internal="APPS.app_ctrl" />
+ <interface name="apps_simu_mode_clkin" internal="APPS.simu_mode_clkin" />
+ <interface name="clk_pld_in" internal="clk_pld.in_clk" type="clock" dir="end" />
+ <interface
+   name="clock_bridge_0_out_clk"
+   internal="clock_bridge_0.out_clk"
+   type="clock"
+   dir="start" />
+ <interface name="hip_ctrl" internal="DUT.hip_ctrl" type="conduit" dir="end" />
+ <interface name="hip_serial" internal="DUT.hip_serial" type="conduit" dir="end" />
+ <interface name="pcie_rstn" internal="DUT.npor" type="conduit" dir="end" />
+ <interface name="reconfig_xcvr_clk" internal="APPS.reconfig_xcvr_clk" />
+ <interface name="reconfig_xcvr_rst" internal="APPS.reconfig_xcvr_rst" />
+ <interface name="refclk" internal="DUT.refclk" type="clock" dir="end" />
+ <module name="APPS" kind="altera_pcie_a10_ed" version="17.1" enabled="1">
+  <parameter name="INTENDED_DEVICE_FAMILY" value="Arria 10" />
+  <parameter name="ast_width_hwtcl" value="Avalon-ST 64-bit" />
+  <parameter name="avalon_waddr_hwltcl" value="12" />
+  <parameter name="check_bus_master_ena_hwtcl" value="1" />
+  <parameter name="check_rx_buffer_cpl_hwtcl" value="1" />
+  <parameter name="device_family_hwtcl" value="Arria 10" />
+  <parameter name="enable_avst_reset_hwtcl" value="0" />
+  <parameter name="enable_fpga_devkit_board_hwtcl" value="0" />
+  <parameter name="enable_fpga_devkit_cbb_hwtcl" value="0" />
+  <parameter name="enable_lmi_hwtcl" value="0" />
+  <parameter name="extend_tag_field_hwtcl" value="64" />
+  <parameter name="gen123_lane_rate_mode_hwtcl" value="Gen1 (2.5 Gbps)" />
+  <parameter name="lane_mask_hwtcl" value="x1" />
+  <parameter name="max_payload_size_hwtcl" value="128" />
+  <parameter name="multiple_packets_per_cycle_hwtcl" value="0" />
+  <parameter name="num_of_func_hwtcl" value="1" />
+  <parameter name="pld_clockrate_hwtcl" value="125000000" />
+  <parameter name="port_type_hwtcl" value="Native endpoint" />
+  <parameter name="track_rxfc_cplbuf_ovf_hwtcl" value="0" />
+  <parameter name="use_crc_forwarding_hwtcl" value="0" />
+  <parameter name="use_ep_simple_downstream_apps_hwtcl" value="0" />
+  <parameter name="use_rx_st_be_hwtcl" value="0" />
+  <parameter name="use_tx_cons_cred_sel_hwtcl" value="0" />
+ </module>
+ <module name="DUT" kind="altera_pcie_a10_hip" version="17.1" enabled="1">
+  <parameter name="AUTO_RXM_IRQ_INTERRUPTS_USED" value="-1" />
+  <parameter name="adme_enable_hwtcl" value="0" />
+  <parameter name="advance_error_reporting_hwtcl" value="1" />
+  <parameter name="apps_type_hwtcl" value="0" />
+  <parameter name="ari_support_hwtcl" value="0" />
+  <parameter name="ast_trs_num_desc_hwtcl" value="16" />
+  <parameter name="ast_trs_rxdata_width_hwtcl" value="256" />
+  <parameter name="ast_trs_rxdesc_width_hwtcl" value="256" />
+  <parameter name="ast_trs_rxmty_width_hwtcl" value="32" />
+  <parameter name="ast_trs_txdata_width_hwtcl" value="256" />
+  <parameter name="ast_trs_txdesc_width_hwtcl" value="256" />
+  <parameter name="ast_trs_txmty_width_hwtcl" value="32" />
+  <parameter name="ast_trs_txstatus_width_hwtcl" value="256" />
+  <parameter name="avmm_addr_width_hwtcl" value="32" />
+  <parameter name="bar0_address_width_hwtcl" value="28" />
+  <parameter name="bar0_type_hwtcl">64-bit prefetchable memory</parameter>
+  <parameter name="bar1_address_width_hwtcl" value="0" />
+  <parameter name="bar1_type_hwtcl" value="Disabled" />
+  <parameter name="bar2_address_width_hwtcl" value="10" />
+  <parameter name="bar2_type_hwtcl">32-bit non-prefetchable memory</parameter>
+  <parameter name="bar3_address_width_hwtcl" value="0" />
+  <parameter name="bar3_type_hwtcl" value="Disabled" />
+  <parameter name="bar4_address_width_hwtcl" value="0" />
+  <parameter name="bar4_type_hwtcl" value="Disabled" />
+  <parameter name="bar5_address_width_hwtcl" value="0" />
+  <parameter name="bar5_type_hwtcl" value="Disabled" />
+  <parameter name="base_device" value="NIGHTFURY4" />
+  <parameter name="bfm_drive_interface_clk_hwtcl" value="1" />
+  <parameter name="bfm_drive_interface_control_hwtcl" value="1" />
+  <parameter name="bfm_drive_interface_npor_hwtcl" value="1" />
+  <parameter name="bfm_drive_interface_pipe_hwtcl" value="1" />
+  <parameter name="cb_pcie_mode_hwtcl" value="0" />
+  <parameter name="cb_pcie_rx_lite_hwtcl" value="0" />
+  <parameter name="cg_a2p_addr_map_num_entries_hwtcl" value="2" />
+  <parameter name="cg_a2p_addr_map_pass_thru_bits_hwtcl" value="20" />
+  <parameter name="cg_enable_a2p_interrupt_hwtcl" value="1" />
+  <parameter name="cg_enable_advanced_interrupt_hwtcl" value="0" />
+  <parameter name="cg_impl_cra_av_slave_port_hwtcl" value="1" />
+  <parameter name="class_code_hwtcl" value="16711680" />
+  <parameter name="completion_timeout_disable_hwtcl" value="1" />
+  <parameter name="completion_timeout_hwtcl" value="BCD" />
+  <parameter name="cseb_autonomous_hwtcl" value="0" />
+  <parameter name="cseb_config_bypass_gui_hwtcl" value="0" />
+  <parameter name="cseb_extend_pci_hwtcl" value="0" />
+  <parameter name="cseb_extend_pcie_hwtcl" value="0" />
+  <parameter name="cvp_enable_hwtcl" value="0" />
+  <parameter name="deemphasis_enable_hwtcl" value="0" />
+  <parameter name="design_environment_hwtcl" value="" />
+  <parameter name="devhide_support_hwtcl" value="0" />
+  <parameter name="device_embedded_ep_support_hwtcl" value="0" />
+  <parameter name="device_family" value="Arria 10" />
+  <parameter name="device_id_hwtcl" value="57345" />
+  <parameter name="dis_adapt" value="0" />
+  <parameter name="dll_active_report_support_hwtcl" value="0" />
+  <parameter name="dma_use_scfifo_ext_hwtcl" value="0" />
+  <parameter name="ecrc_check_capable_hwtcl" value="1" />
+  <parameter name="ecrc_gen_capable_hwtcl" value="1" />
+  <parameter name="enable_ast_trs_hwtcl" value="0" />
+  <parameter name="enable_avst_reset_hwtcl" value="0" />
+  <parameter name="enable_custom_features_hwtcl" value="0" />
+  <parameter name="enable_devkit_conduit_hwtcl" value="0" />
+  <parameter name="enable_example_design_qii_hwtcl" value="0" />
+  <parameter name="enable_example_design_sim_hwtcl" value="0" />
+  <parameter name="enable_example_design_synth_hwtcl" value="0" />
+  <parameter name="enable_example_design_tb_hwtcl" value="0" />
+  <parameter name="enable_function_msix_support_hwtcl" value="0" />
+  <parameter name="enable_gen3phase2eq_timechange" value="0" />
+  <parameter name="enable_hip_status_for_avmm_hwtcl" value="0" />
+  <parameter name="enable_lmi_hwtcl" value="0" />
+  <parameter name="enable_nobar_slection_hwtcl" value="0" />
+  <parameter name="enable_pipe32_phyip_ser_driver_hwtcl" value="0" />
+  <parameter name="enable_rxm_burst_hwtcl" value="0" />
+  <parameter name="enable_skp_det" value="0" />
+  <parameter name="enable_slot_register_hwtcl" value="0" />
+  <parameter name="enable_soft_dfe" value="0" />
+  <parameter name="endpoint_l0_latency_hwtcl" value="0" />
+  <parameter name="endpoint_l1_latency_hwtcl" value="0" />
+  <parameter name="expansion_base_address_register_hwtcl" value="0" />
+  <parameter name="export_fpll_output_to_top_level_hwtcl" value="0" />
+  <parameter name="export_phy_input_to_top_level_hwtcl" value="0" />
+  <parameter name="extended_tag_field_hwtcl" value="32" />
+  <parameter name="extended_tag_support_hwtcl" value="0" />
+  <parameter name="flr_capability_user_hwtcl" value="0" />
+  <parameter name="force_tag_checking_on_hwtcl" value="0" />
+  <parameter name="gen3_coeff_1_hwtcl" value="9" />
+  <parameter name="gen3_coeff_3_ber_meas_hwtcl" value="12ms" />
+  <parameter name="hip_reconfig_hwtcl" value="0" />
+  <parameter name="include_virtio_capabilities_hwtcl" value="0" />
+  <parameter name="interface_type_hwtcl" value="Avalon-ST" />
+  <parameter name="internal_controller_hwtcl" value="0" />
+  <parameter name="io_window_addr_width_hwtcl" value="0" />
+  <parameter name="link2csr_width_hwtcl" value="16" />
+  <parameter name="maximum_payload_size_hwtcl" value="128" />
+  <parameter name="message_level" value="error" />
+  <parameter name="msi_multi_message_capable_hwtcl" value="4" />
+  <parameter name="msix_pba_bir_hwtcl" value="0" />
+  <parameter name="msix_pba_offset_hwtcl" value="0" />
+  <parameter name="msix_table_bir_hwtcl" value="0" />
+  <parameter name="msix_table_offset_hwtcl" value="0" />
+  <parameter name="msix_table_size_hwtcl" value="0" />
+  <parameter name="multiple_packets_per_cycle_hwtcl" value="0" />
+  <parameter name="part_trait_device" value="10AS066N3F40E2SGE2" />
+  <parameter name="pcie_spec_version_hwtcl" value="3.0" />
+  <parameter name="pf0_ats_invalidate_queue_depth_hwtcl" value="0" />
+  <parameter name="pf0_bar0_prefetchable_hwtcl" value="1" />
+  <parameter name="pf0_bar0_present_hwtcl" value="1" />
+  <parameter name="pf0_bar0_size_hwtcl" value="12" />
+  <parameter name="pf0_bar0_type_hwtcl" value="1" />
+  <parameter name="pf0_bar1_prefetchable_hwtcl" value="1" />
+  <parameter name="pf0_bar1_present_hwtcl" value="0" />
+  <parameter name="pf0_bar1_size_hwtcl" value="12" />
+  <parameter name="pf0_bar2_prefetchable_hwtcl" value="1" />
+  <parameter name="pf0_bar2_present_hwtcl" value="0" />
+  <parameter name="pf0_bar2_size_hwtcl" value="12" />
+  <parameter name="pf0_bar2_type_hwtcl" value="1" />
+  <parameter name="pf0_bar3_prefetchable_hwtcl" value="1" />
+  <parameter name="pf0_bar3_present_hwtcl" value="0" />
+  <parameter name="pf0_bar3_size_hwtcl" value="12" />
+  <parameter name="pf0_bar4_prefetchable_hwtcl" value="1" />
+  <parameter name="pf0_bar4_present_hwtcl" value="0" />
+  <parameter name="pf0_bar4_size_hwtcl" value="12" />
+  <parameter name="pf0_bar4_type_hwtcl" value="1" />
+  <parameter name="pf0_bar5_prefetchable_hwtcl" value="1" />
+  <parameter name="pf0_bar5_present_hwtcl" value="0" />
+  <parameter name="pf0_bar5_size_hwtcl" value="12" />
+  <parameter name="pf0_exprom_bar_present_hwtcl" value="0" />
+  <parameter name="pf0_exprom_bar_size_hwtcl" value="12" />
+  <parameter name="pf0_extra_bar_present_hwtcl" value="0" />
+  <parameter name="pf0_extra_bar_size_hwtcl" value="12" />
+  <parameter name="pf0_interrupt_pin_hwtcl" value="inta" />
+  <parameter name="pf0_intr_line_hwtcl" value="0" />
+  <parameter name="pf0_msi_multi_message_capable_hwtcl" value="4" />
+  <parameter name="pf0_msix_pba_bir_hwtcl" value="0" />
+  <parameter name="pf0_msix_pba_offset_hwtcl" value="0" />
+  <parameter name="pf0_msix_table_bir_hwtcl" value="0" />
+  <parameter name="pf0_msix_table_offset_hwtcl" value="0" />
+  <parameter name="pf0_msix_table_size_hwtcl" value="0" />
+  <parameter name="pf0_pci_prog_intfc_byte_hwtcl" value="0" />
+  <parameter name="pf0_subclass_code_hwtcl" value="0" />
+  <parameter name="pf0_tph_dev_specific_mode_support_hwtcl" value="0" />
+  <parameter name="pf0_tph_int_mode_support_hwtcl" value="0" />
+  <parameter name="pf0_tph_st_table_location_hwtcl" value="0" />
+  <parameter name="pf0_tph_st_table_size_hwtcl" value="63" />
+  <parameter name="pf0_vf_bar0_prefetchable_hwtcl" value="1" />
+  <parameter name="pf0_vf_bar0_present_hwtcl" value="0" />
+  <parameter name="pf0_vf_bar0_size_hwtcl" value="12" />
+  <parameter name="pf0_vf_bar0_type_hwtcl" value="1" />
+  <parameter name="pf0_vf_bar1_prefetchable_hwtcl" value="1" />
+  <parameter name="pf0_vf_bar1_present_hwtcl" value="0" />
+  <parameter name="pf0_vf_bar1_size_hwtcl" value="12" />
+  <parameter name="pf0_vf_bar2_prefetchable_hwtcl" value="1" />
+  <parameter name="pf0_vf_bar2_present_hwtcl" value="0" />
+  <parameter name="pf0_vf_bar2_size_hwtcl" value="12" />
+  <parameter name="pf0_vf_bar2_type_hwtcl" value="1" />
+  <parameter name="pf0_vf_bar3_prefetchable_hwtcl" value="1" />
+  <parameter name="pf0_vf_bar3_present_hwtcl" value="0" />
+  <parameter name="pf0_vf_bar3_size_hwtcl" value="12" />
+  <parameter name="pf0_vf_bar4_prefetchable_hwtcl" value="1" />
+  <parameter name="pf0_vf_bar4_present_hwtcl" value="0" />
+  <parameter name="pf0_vf_bar4_size_hwtcl" value="12" />
+  <parameter name="pf0_vf_bar4_type_hwtcl" value="1" />
+  <parameter name="pf0_vf_bar5_prefetchable_hwtcl" value="1" />
+  <parameter name="pf0_vf_bar5_present_hwtcl" value="0" />
+  <parameter name="pf0_vf_bar5_size_hwtcl" value="12" />
+  <parameter name="pf0_vf_count_user_hwtcl" value="0" />
+  <parameter name="pf0_vf_device_id_hwtcl" value="0" />
+  <parameter name="pf0_vf_msix_pba_bir_hwtcl" value="0" />
+  <parameter name="pf0_vf_msix_pba_offset_hwtcl" value="0" />
+  <parameter name="pf0_vf_msix_tbl_bir_hwtcl" value="0" />
+  <parameter name="pf0_vf_msix_tbl_offset_hwtcl" value="0" />
+  <parameter name="pf0_vf_msix_tbl_size_hwtcl" value="0" />
+  <parameter name="pf0_vf_tph_dev_specific_mode_support_hwtcl" value="0" />
+  <parameter name="pf0_vf_tph_int_mode_support_hwtcl" value="0" />
+  <parameter name="pf0_vf_tph_st_table_location_hwtcl" value="0" />
+  <parameter name="pf0_vf_tph_st_table_size_hwtcl" value="63" />
+  <parameter name="pf0_virtio_capability_present_hwtcl" value="0" />
+  <parameter name="pf0_virtio_cmn_config_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf0_virtio_cmn_config_bar_offset_hwtcl" value="0" />
+  <parameter name="pf0_virtio_cmn_config_structure_length_hwtcl" value="0" />
+  <parameter name="pf0_virtio_device_specific_cap_present_hwtcl" value="0" />
+  <parameter name="pf0_virtio_devspecific_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf0_virtio_devspecific_bar_offset_hwtcl" value="0" />
+  <parameter name="pf0_virtio_devspecific_structure_length_hwtcl" value="0" />
+  <parameter name="pf0_virtio_isrstatus_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf0_virtio_isrstatus_bar_offset_hwtcl" value="0" />
+  <parameter name="pf0_virtio_isrstatus_structure_length_hwtcl" value="0" />
+  <parameter name="pf0_virtio_notification_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf0_virtio_notification_bar_offset_hwtcl" value="0" />
+  <parameter name="pf0_virtio_notification_structure_length_hwtcl" value="0" />
+  <parameter name="pf0_virtio_pciconfig_access_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf0_virtio_pciconfig_access_bar_offset_hwtcl" value="0" />
+  <parameter name="pf0_virtio_pciconfig_access_structure_length_hwtcl" value="0" />
+  <parameter name="pf1_ats_invalidate_queue_depth_hwtcl" value="0" />
+  <parameter name="pf1_bar0_prefetchable_hwtcl" value="1" />
+  <parameter name="pf1_bar0_present_hwtcl" value="0" />
+  <parameter name="pf1_bar0_size_hwtcl" value="12" />
+  <parameter name="pf1_bar0_type_hwtcl" value="1" />
+  <parameter name="pf1_bar1_prefetchable_hwtcl" value="1" />
+  <parameter name="pf1_bar1_present_hwtcl" value="0" />
+  <parameter name="pf1_bar1_size_hwtcl" value="12" />
+  <parameter name="pf1_bar2_prefetchable_hwtcl" value="1" />
+  <parameter name="pf1_bar2_present_hwtcl" value="0" />
+  <parameter name="pf1_bar2_size_hwtcl" value="12" />
+  <parameter name="pf1_bar2_type_hwtcl" value="1" />
+  <parameter name="pf1_bar3_prefetchable_hwtcl" value="1" />
+  <parameter name="pf1_bar3_present_hwtcl" value="0" />
+  <parameter name="pf1_bar3_size_hwtcl" value="12" />
+  <parameter name="pf1_bar4_prefetchable_hwtcl" value="1" />
+  <parameter name="pf1_bar4_present_hwtcl" value="0" />
+  <parameter name="pf1_bar4_size_hwtcl" value="12" />
+  <parameter name="pf1_bar4_type_hwtcl" value="1" />
+  <parameter name="pf1_bar5_prefetchable_hwtcl" value="1" />
+  <parameter name="pf1_bar5_present_hwtcl" value="0" />
+  <parameter name="pf1_bar5_size_hwtcl" value="12" />
+  <parameter name="pf1_class_code_hwtcl" value="0" />
+  <parameter name="pf1_device_id_hwtcl" value="0" />
+  <parameter name="pf1_exprom_bar_present_hwtcl" value="0" />
+  <parameter name="pf1_exprom_bar_size_hwtcl" value="12" />
+  <parameter name="pf1_interrupt_pin_hwtcl" value="inta" />
+  <parameter name="pf1_intr_line_hwtcl" value="0" />
+  <parameter name="pf1_msi_multi_message_capable_hwtcl" value="4" />
+  <parameter name="pf1_msix_pba_bir_hwtcl" value="0" />
+  <parameter name="pf1_msix_pba_offset_hwtcl" value="0" />
+  <parameter name="pf1_msix_table_bir_hwtcl" value="0" />
+  <parameter name="pf1_msix_table_offset_hwtcl" value="0" />
+  <parameter name="pf1_msix_table_size_hwtcl" value="0" />
+  <parameter name="pf1_pci_prog_intfc_byte_hwtcl" value="0" />
+  <parameter name="pf1_revision_id_hwtcl" value="0" />
+  <parameter name="pf1_subclass_code_hwtcl" value="0" />
+  <parameter name="pf1_subsystem_device_id_hwtcl" value="0" />
+  <parameter name="pf1_subsystem_vendor_id_hwtcl" value="0" />
+  <parameter name="pf1_tph_dev_specific_mode_support_hwtcl" value="0" />
+  <parameter name="pf1_tph_int_mode_support_hwtcl" value="0" />
+  <parameter name="pf1_tph_st_table_location_hwtcl" value="0" />
+  <parameter name="pf1_tph_st_table_size_hwtcl" value="63" />
+  <parameter name="pf1_vendor_id_hwtcl" value="0" />
+  <parameter name="pf1_vf_bar0_prefetchable_hwtcl" value="1" />
+  <parameter name="pf1_vf_bar0_present_hwtcl" value="0" />
+  <parameter name="pf1_vf_bar0_size_hwtcl" value="12" />
+  <parameter name="pf1_vf_bar0_type_hwtcl" value="1" />
+  <parameter name="pf1_vf_bar1_prefetchable_hwtcl" value="1" />
+  <parameter name="pf1_vf_bar1_present_hwtcl" value="0" />
+  <parameter name="pf1_vf_bar1_size_hwtcl" value="12" />
+  <parameter name="pf1_vf_bar2_prefetchable_hwtcl" value="1" />
+  <parameter name="pf1_vf_bar2_present_hwtcl" value="0" />
+  <parameter name="pf1_vf_bar2_size_hwtcl" value="12" />
+  <parameter name="pf1_vf_bar2_type_hwtcl" value="1" />
+  <parameter name="pf1_vf_bar3_prefetchable_hwtcl" value="1" />
+  <parameter name="pf1_vf_bar3_present_hwtcl" value="0" />
+  <parameter name="pf1_vf_bar3_size_hwtcl" value="12" />
+  <parameter name="pf1_vf_bar4_prefetchable_hwtcl" value="1" />
+  <parameter name="pf1_vf_bar4_present_hwtcl" value="0" />
+  <parameter name="pf1_vf_bar4_size_hwtcl" value="12" />
+  <parameter name="pf1_vf_bar4_type_hwtcl" value="1" />
+  <parameter name="pf1_vf_bar5_prefetchable_hwtcl" value="1" />
+  <parameter name="pf1_vf_bar5_present_hwtcl" value="0" />
+  <parameter name="pf1_vf_bar5_size_hwtcl" value="12" />
+  <parameter name="pf1_vf_count_user_hwtcl" value="0" />
+  <parameter name="pf1_vf_device_id_hwtcl" value="0" />
+  <parameter name="pf1_vf_msix_pba_bir_hwtcl" value="0" />
+  <parameter name="pf1_vf_msix_pba_offset_hwtcl" value="0" />
+  <parameter name="pf1_vf_msix_tbl_bir_hwtcl" value="0" />
+  <parameter name="pf1_vf_msix_tbl_offset_hwtcl" value="0" />
+  <parameter name="pf1_vf_msix_tbl_size_hwtcl" value="0" />
+  <parameter name="pf1_vf_tph_dev_specific_mode_support_hwtcl" value="0" />
+  <parameter name="pf1_vf_tph_int_mode_support_hwtcl" value="0" />
+  <parameter name="pf1_vf_tph_st_table_location_hwtcl" value="0" />
+  <parameter name="pf1_vf_tph_st_table_size_hwtcl" value="63" />
+  <parameter name="pf1_virtio_capability_present_hwtcl" value="0" />
+  <parameter name="pf1_virtio_cmn_config_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf1_virtio_cmn_config_bar_offset_hwtcl" value="0" />
+  <parameter name="pf1_virtio_cmn_config_structure_length_hwtcl" value="0" />
+  <parameter name="pf1_virtio_device_specific_cap_present_hwtcl" value="0" />
+  <parameter name="pf1_virtio_devspecific_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf1_virtio_devspecific_bar_offset_hwtcl" value="0" />
+  <parameter name="pf1_virtio_devspecific_structure_length_hwtcl" value="0" />
+  <parameter name="pf1_virtio_isrstatus_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf1_virtio_isrstatus_bar_offset_hwtcl" value="0" />
+  <parameter name="pf1_virtio_isrstatus_structure_length_hwtcl" value="0" />
+  <parameter name="pf1_virtio_notification_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf1_virtio_notification_bar_offset_hwtcl" value="0" />
+  <parameter name="pf1_virtio_notification_structure_length_hwtcl" value="0" />
+  <parameter name="pf1_virtio_pciconfig_access_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf1_virtio_pciconfig_access_bar_offset_hwtcl" value="0" />
+  <parameter name="pf1_virtio_pciconfig_access_structure_length_hwtcl" value="0" />
+  <parameter name="pf2_ats_invalidate_queue_depth_hwtcl" value="0" />
+  <parameter name="pf2_bar0_prefetchable_hwtcl" value="1" />
+  <parameter name="pf2_bar0_present_hwtcl" value="0" />
+  <parameter name="pf2_bar0_size_hwtcl" value="12" />
+  <parameter name="pf2_bar0_type_hwtcl" value="1" />
+  <parameter name="pf2_bar1_prefetchable_hwtcl" value="1" />
+  <parameter name="pf2_bar1_present_hwtcl" value="0" />
+  <parameter name="pf2_bar1_size_hwtcl" value="12" />
+  <parameter name="pf2_bar2_prefetchable_hwtcl" value="1" />
+  <parameter name="pf2_bar2_present_hwtcl" value="0" />
+  <parameter name="pf2_bar2_size_hwtcl" value="12" />
+  <parameter name="pf2_bar2_type_hwtcl" value="1" />
+  <parameter name="pf2_bar3_prefetchable_hwtcl" value="1" />
+  <parameter name="pf2_bar3_present_hwtcl" value="0" />
+  <parameter name="pf2_bar3_size_hwtcl" value="12" />
+  <parameter name="pf2_bar4_prefetchable_hwtcl" value="1" />
+  <parameter name="pf2_bar4_present_hwtcl" value="0" />
+  <parameter name="pf2_bar4_size_hwtcl" value="12" />
+  <parameter name="pf2_bar4_type_hwtcl" value="1" />
+  <parameter name="pf2_bar5_prefetchable_hwtcl" value="1" />
+  <parameter name="pf2_bar5_present_hwtcl" value="0" />
+  <parameter name="pf2_bar5_size_hwtcl" value="12" />
+  <parameter name="pf2_class_code_hwtcl" value="0" />
+  <parameter name="pf2_device_id_hwtcl" value="0" />
+  <parameter name="pf2_exprom_bar_present_hwtcl" value="0" />
+  <parameter name="pf2_exprom_bar_size_hwtcl" value="12" />
+  <parameter name="pf2_interrupt_pin_hwtcl" value="inta" />
+  <parameter name="pf2_intr_line_hwtcl" value="0" />
+  <parameter name="pf2_msi_multi_message_capable_hwtcl" value="4" />
+  <parameter name="pf2_msix_pba_bir_hwtcl" value="0" />
+  <parameter name="pf2_msix_pba_offset_hwtcl" value="0" />
+  <parameter name="pf2_msix_table_bir_hwtcl" value="0" />
+  <parameter name="pf2_msix_table_offset_hwtcl" value="0" />
+  <parameter name="pf2_msix_table_size_hwtcl" value="0" />
+  <parameter name="pf2_pci_prog_intfc_byte_hwtcl" value="0" />
+  <parameter name="pf2_revision_id_hwtcl" value="0" />
+  <parameter name="pf2_subclass_code_hwtcl" value="0" />
+  <parameter name="pf2_subsystem_device_id_hwtcl" value="0" />
+  <parameter name="pf2_subsystem_vendor_id_hwtcl" value="0" />
+  <parameter name="pf2_tph_dev_specific_mode_support_hwtcl" value="0" />
+  <parameter name="pf2_tph_int_mode_support_hwtcl" value="0" />
+  <parameter name="pf2_tph_st_table_location_hwtcl" value="0" />
+  <parameter name="pf2_tph_st_table_size_hwtcl" value="63" />
+  <parameter name="pf2_vendor_id_hwtcl" value="0" />
+  <parameter name="pf2_vf_bar0_prefetchable_hwtcl" value="1" />
+  <parameter name="pf2_vf_bar0_present_hwtcl" value="0" />
+  <parameter name="pf2_vf_bar0_size_hwtcl" value="12" />
+  <parameter name="pf2_vf_bar0_type_hwtcl" value="1" />
+  <parameter name="pf2_vf_bar1_prefetchable_hwtcl" value="1" />
+  <parameter name="pf2_vf_bar1_present_hwtcl" value="0" />
+  <parameter name="pf2_vf_bar1_size_hwtcl" value="12" />
+  <parameter name="pf2_vf_bar2_prefetchable_hwtcl" value="1" />
+  <parameter name="pf2_vf_bar2_present_hwtcl" value="0" />
+  <parameter name="pf2_vf_bar2_size_hwtcl" value="12" />
+  <parameter name="pf2_vf_bar2_type_hwtcl" value="1" />
+  <parameter name="pf2_vf_bar3_prefetchable_hwtcl" value="1" />
+  <parameter name="pf2_vf_bar3_present_hwtcl" value="0" />
+  <parameter name="pf2_vf_bar3_size_hwtcl" value="12" />
+  <parameter name="pf2_vf_bar4_prefetchable_hwtcl" value="1" />
+  <parameter name="pf2_vf_bar4_present_hwtcl" value="0" />
+  <parameter name="pf2_vf_bar4_size_hwtcl" value="12" />
+  <parameter name="pf2_vf_bar4_type_hwtcl" value="1" />
+  <parameter name="pf2_vf_bar5_prefetchable_hwtcl" value="1" />
+  <parameter name="pf2_vf_bar5_present_hwtcl" value="0" />
+  <parameter name="pf2_vf_bar5_size_hwtcl" value="12" />
+  <parameter name="pf2_vf_count_user_hwtcl" value="0" />
+  <parameter name="pf2_vf_device_id_hwtcl" value="0" />
+  <parameter name="pf2_vf_msix_pba_bir_hwtcl" value="0" />
+  <parameter name="pf2_vf_msix_pba_offset_hwtcl" value="0" />
+  <parameter name="pf2_vf_msix_tbl_bir_hwtcl" value="0" />
+  <parameter name="pf2_vf_msix_tbl_offset_hwtcl" value="0" />
+  <parameter name="pf2_vf_msix_tbl_size_hwtcl" value="0" />
+  <parameter name="pf2_vf_tph_dev_specific_mode_support_hwtcl" value="0" />
+  <parameter name="pf2_vf_tph_int_mode_support_hwtcl" value="0" />
+  <parameter name="pf2_vf_tph_st_table_location_hwtcl" value="0" />
+  <parameter name="pf2_vf_tph_st_table_size_hwtcl" value="63" />
+  <parameter name="pf2_virtio_capability_present_hwtcl" value="0" />
+  <parameter name="pf2_virtio_cmn_config_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf2_virtio_cmn_config_bar_offset_hwtcl" value="0" />
+  <parameter name="pf2_virtio_cmn_config_structure_length_hwtcl" value="0" />
+  <parameter name="pf2_virtio_device_specific_cap_present_hwtcl" value="0" />
+  <parameter name="pf2_virtio_devspecific_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf2_virtio_devspecific_bar_offset_hwtcl" value="0" />
+  <parameter name="pf2_virtio_devspecific_structure_length_hwtcl" value="0" />
+  <parameter name="pf2_virtio_isrstatus_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf2_virtio_isrstatus_bar_offset_hwtcl" value="0" />
+  <parameter name="pf2_virtio_isrstatus_structure_length_hwtcl" value="0" />
+  <parameter name="pf2_virtio_notification_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf2_virtio_notification_bar_offset_hwtcl" value="0" />
+  <parameter name="pf2_virtio_notification_structure_length_hwtcl" value="0" />
+  <parameter name="pf2_virtio_pciconfig_access_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf2_virtio_pciconfig_access_bar_offset_hwtcl" value="0" />
+  <parameter name="pf2_virtio_pciconfig_access_structure_length_hwtcl" value="0" />
+  <parameter name="pf3_ats_invalidate_queue_depth_hwtcl" value="0" />
+  <parameter name="pf3_bar0_prefetchable_hwtcl" value="1" />
+  <parameter name="pf3_bar0_present_hwtcl" value="0" />
+  <parameter name="pf3_bar0_size_hwtcl" value="12" />
+  <parameter name="pf3_bar0_type_hwtcl" value="1" />
+  <parameter name="pf3_bar1_prefetchable_hwtcl" value="1" />
+  <parameter name="pf3_bar1_present_hwtcl" value="0" />
+  <parameter name="pf3_bar1_size_hwtcl" value="12" />
+  <parameter name="pf3_bar2_prefetchable_hwtcl" value="1" />
+  <parameter name="pf3_bar2_present_hwtcl" value="0" />
+  <parameter name="pf3_bar2_size_hwtcl" value="12" />
+  <parameter name="pf3_bar2_type_hwtcl" value="1" />
+  <parameter name="pf3_bar3_prefetchable_hwtcl" value="1" />
+  <parameter name="pf3_bar3_present_hwtcl" value="0" />
+  <parameter name="pf3_bar3_size_hwtcl" value="12" />
+  <parameter name="pf3_bar4_prefetchable_hwtcl" value="1" />
+  <parameter name="pf3_bar4_present_hwtcl" value="0" />
+  <parameter name="pf3_bar4_size_hwtcl" value="12" />
+  <parameter name="pf3_bar4_type_hwtcl" value="1" />
+  <parameter name="pf3_bar5_prefetchable_hwtcl" value="1" />
+  <parameter name="pf3_bar5_present_hwtcl" value="0" />
+  <parameter name="pf3_bar5_size_hwtcl" value="12" />
+  <parameter name="pf3_class_code_hwtcl" value="0" />
+  <parameter name="pf3_device_id_hwtcl" value="0" />
+  <parameter name="pf3_exprom_bar_present_hwtcl" value="0" />
+  <parameter name="pf3_exprom_bar_size_hwtcl" value="12" />
+  <parameter name="pf3_interrupt_pin_hwtcl" value="inta" />
+  <parameter name="pf3_intr_line_hwtcl" value="0" />
+  <parameter name="pf3_msi_multi_message_capable_hwtcl" value="4" />
+  <parameter name="pf3_msix_pba_bir_hwtcl" value="0" />
+  <parameter name="pf3_msix_pba_offset_hwtcl" value="0" />
+  <parameter name="pf3_msix_table_bir_hwtcl" value="0" />
+  <parameter name="pf3_msix_table_offset_hwtcl" value="0" />
+  <parameter name="pf3_msix_table_size_hwtcl" value="0" />
+  <parameter name="pf3_pci_prog_intfc_byte_hwtcl" value="0" />
+  <parameter name="pf3_revision_id_hwtcl" value="0" />
+  <parameter name="pf3_subclass_code_hwtcl" value="0" />
+  <parameter name="pf3_subsystem_device_id_hwtcl" value="0" />
+  <parameter name="pf3_subsystem_vendor_id_hwtcl" value="0" />
+  <parameter name="pf3_tph_dev_specific_mode_support_hwtcl" value="0" />
+  <parameter name="pf3_tph_int_mode_support_hwtcl" value="0" />
+  <parameter name="pf3_tph_st_table_location_hwtcl" value="0" />
+  <parameter name="pf3_tph_st_table_size_hwtcl" value="63" />
+  <parameter name="pf3_vendor_id_hwtcl" value="0" />
+  <parameter name="pf3_vf_bar0_prefetchable_hwtcl" value="1" />
+  <parameter name="pf3_vf_bar0_present_hwtcl" value="0" />
+  <parameter name="pf3_vf_bar0_size_hwtcl" value="12" />
+  <parameter name="pf3_vf_bar0_type_hwtcl" value="1" />
+  <parameter name="pf3_vf_bar1_prefetchable_hwtcl" value="1" />
+  <parameter name="pf3_vf_bar1_present_hwtcl" value="0" />
+  <parameter name="pf3_vf_bar1_size_hwtcl" value="12" />
+  <parameter name="pf3_vf_bar2_prefetchable_hwtcl" value="1" />
+  <parameter name="pf3_vf_bar2_present_hwtcl" value="0" />
+  <parameter name="pf3_vf_bar2_size_hwtcl" value="12" />
+  <parameter name="pf3_vf_bar2_type_hwtcl" value="1" />
+  <parameter name="pf3_vf_bar3_prefetchable_hwtcl" value="1" />
+  <parameter name="pf3_vf_bar3_present_hwtcl" value="0" />
+  <parameter name="pf3_vf_bar3_size_hwtcl" value="12" />
+  <parameter name="pf3_vf_bar4_prefetchable_hwtcl" value="1" />
+  <parameter name="pf3_vf_bar4_present_hwtcl" value="0" />
+  <parameter name="pf3_vf_bar4_size_hwtcl" value="12" />
+  <parameter name="pf3_vf_bar4_type_hwtcl" value="1" />
+  <parameter name="pf3_vf_bar5_prefetchable_hwtcl" value="1" />
+  <parameter name="pf3_vf_bar5_present_hwtcl" value="0" />
+  <parameter name="pf3_vf_bar5_size_hwtcl" value="12" />
+  <parameter name="pf3_vf_count_user_hwtcl" value="0" />
+  <parameter name="pf3_vf_device_id_hwtcl" value="0" />
+  <parameter name="pf3_vf_msix_pba_bir_hwtcl" value="0" />
+  <parameter name="pf3_vf_msix_pba_offset_hwtcl" value="0" />
+  <parameter name="pf3_vf_msix_tbl_bir_hwtcl" value="0" />
+  <parameter name="pf3_vf_msix_tbl_offset_hwtcl" value="0" />
+  <parameter name="pf3_vf_msix_tbl_size_hwtcl" value="0" />
+  <parameter name="pf3_vf_tph_dev_specific_mode_support_hwtcl" value="0" />
+  <parameter name="pf3_vf_tph_int_mode_support_hwtcl" value="0" />
+  <parameter name="pf3_vf_tph_st_table_location_hwtcl" value="0" />
+  <parameter name="pf3_vf_tph_st_table_size_hwtcl" value="63" />
+  <parameter name="pf3_virtio_capability_present_hwtcl" value="0" />
+  <parameter name="pf3_virtio_cmn_config_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf3_virtio_cmn_config_bar_offset_hwtcl" value="0" />
+  <parameter name="pf3_virtio_cmn_config_structure_length_hwtcl" value="0" />
+  <parameter name="pf3_virtio_device_specific_cap_present_hwtcl" value="0" />
+  <parameter name="pf3_virtio_devspecific_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf3_virtio_devspecific_bar_offset_hwtcl" value="0" />
+  <parameter name="pf3_virtio_devspecific_structure_length_hwtcl" value="0" />
+  <parameter name="pf3_virtio_isrstatus_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf3_virtio_isrstatus_bar_offset_hwtcl" value="0" />
+  <parameter name="pf3_virtio_isrstatus_structure_length_hwtcl" value="0" />
+  <parameter name="pf3_virtio_notification_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf3_virtio_notification_bar_offset_hwtcl" value="0" />
+  <parameter name="pf3_virtio_notification_structure_length_hwtcl" value="0" />
+  <parameter name="pf3_virtio_pciconfig_access_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf3_virtio_pciconfig_access_bar_offset_hwtcl" value="0" />
+  <parameter name="pf3_virtio_pciconfig_access_structure_length_hwtcl" value="0" />
+  <parameter name="pf4_bar0_prefetchable_hwtcl" value="1" />
+  <parameter name="pf4_bar0_present_hwtcl" value="0" />
+  <parameter name="pf4_bar0_size_hwtcl" value="12" />
+  <parameter name="pf4_bar0_type_hwtcl" value="1" />
+  <parameter name="pf4_bar1_prefetchable_hwtcl" value="1" />
+  <parameter name="pf4_bar1_present_hwtcl" value="0" />
+  <parameter name="pf4_bar1_size_hwtcl" value="12" />
+  <parameter name="pf4_bar2_prefetchable_hwtcl" value="1" />
+  <parameter name="pf4_bar2_present_hwtcl" value="0" />
+  <parameter name="pf4_bar2_size_hwtcl" value="12" />
+  <parameter name="pf4_bar2_type_hwtcl" value="1" />
+  <parameter name="pf4_bar3_prefetchable_hwtcl" value="1" />
+  <parameter name="pf4_bar3_present_hwtcl" value="0" />
+  <parameter name="pf4_bar3_size_hwtcl" value="12" />
+  <parameter name="pf4_bar4_prefetchable_hwtcl" value="1" />
+  <parameter name="pf4_bar4_present_hwtcl" value="0" />
+  <parameter name="pf4_bar4_size_hwtcl" value="12" />
+  <parameter name="pf4_bar4_type_hwtcl" value="1" />
+  <parameter name="pf4_bar5_prefetchable_hwtcl" value="1" />
+  <parameter name="pf4_bar5_present_hwtcl" value="0" />
+  <parameter name="pf4_bar5_size_hwtcl" value="12" />
+  <parameter name="pf4_class_code_hwtcl" value="0" />
+  <parameter name="pf4_device_id_hwtcl" value="0" />
+  <parameter name="pf4_exprom_bar_present_hwtcl" value="0" />
+  <parameter name="pf4_exprom_bar_size_hwtcl" value="12" />
+  <parameter name="pf4_interrupt_pin_hwtcl" value="inta" />
+  <parameter name="pf4_intr_line_hwtcl" value="0" />
+  <parameter name="pf4_msi_multi_message_capable_hwtcl" value="4" />
+  <parameter name="pf4_msix_pba_bir_hwtcl" value="0" />
+  <parameter name="pf4_msix_pba_offset_hwtcl" value="0" />
+  <parameter name="pf4_msix_table_bir_hwtcl" value="0" />
+  <parameter name="pf4_msix_table_offset_hwtcl" value="0" />
+  <parameter name="pf4_msix_table_size_hwtcl" value="0" />
+  <parameter name="pf4_pci_prog_intfc_byte_hwtcl" value="0" />
+  <parameter name="pf4_revision_id_hwtcl" value="0" />
+  <parameter name="pf4_subclass_code_hwtcl" value="0" />
+  <parameter name="pf4_subsystem_device_id_hwtcl" value="0" />
+  <parameter name="pf4_subsystem_vendor_id_hwtcl" value="0" />
+  <parameter name="pf4_vendor_id_hwtcl" value="0" />
+  <parameter name="pf4_vf_device_id_hwtcl" value="0" />
+  <parameter name="pf4_virtio_capability_present_hwtcl" value="0" />
+  <parameter name="pf4_virtio_cmn_config_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf4_virtio_cmn_config_bar_offset_hwtcl" value="0" />
+  <parameter name="pf4_virtio_cmn_config_structure_length_hwtcl" value="0" />
+  <parameter name="pf4_virtio_device_specific_cap_present_hwtcl" value="0" />
+  <parameter name="pf4_virtio_devspecific_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf4_virtio_devspecific_bar_offset_hwtcl" value="0" />
+  <parameter name="pf4_virtio_devspecific_structure_length_hwtcl" value="0" />
+  <parameter name="pf4_virtio_isrstatus_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf4_virtio_isrstatus_bar_offset_hwtcl" value="0" />
+  <parameter name="pf4_virtio_isrstatus_structure_length_hwtcl" value="0" />
+  <parameter name="pf4_virtio_notification_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf4_virtio_notification_bar_offset_hwtcl" value="0" />
+  <parameter name="pf4_virtio_notification_structure_length_hwtcl" value="0" />
+  <parameter name="pf4_virtio_pciconfig_access_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf4_virtio_pciconfig_access_bar_offset_hwtcl" value="0" />
+  <parameter name="pf4_virtio_pciconfig_access_structure_length_hwtcl" value="0" />
+  <parameter name="pf5_bar0_prefetchable_hwtcl" value="1" />
+  <parameter name="pf5_bar0_present_hwtcl" value="0" />
+  <parameter name="pf5_bar0_size_hwtcl" value="12" />
+  <parameter name="pf5_bar0_type_hwtcl" value="1" />
+  <parameter name="pf5_bar1_prefetchable_hwtcl" value="1" />
+  <parameter name="pf5_bar1_present_hwtcl" value="0" />
+  <parameter name="pf5_bar1_size_hwtcl" value="12" />
+  <parameter name="pf5_bar2_prefetchable_hwtcl" value="1" />
+  <parameter name="pf5_bar2_present_hwtcl" value="0" />
+  <parameter name="pf5_bar2_size_hwtcl" value="12" />
+  <parameter name="pf5_bar2_type_hwtcl" value="1" />
+  <parameter name="pf5_bar3_prefetchable_hwtcl" value="1" />
+  <parameter name="pf5_bar3_present_hwtcl" value="0" />
+  <parameter name="pf5_bar3_size_hwtcl" value="12" />
+  <parameter name="pf5_bar4_prefetchable_hwtcl" value="1" />
+  <parameter name="pf5_bar4_present_hwtcl" value="0" />
+  <parameter name="pf5_bar4_size_hwtcl" value="12" />
+  <parameter name="pf5_bar4_type_hwtcl" value="1" />
+  <parameter name="pf5_bar5_prefetchable_hwtcl" value="1" />
+  <parameter name="pf5_bar5_present_hwtcl" value="0" />
+  <parameter name="pf5_bar5_size_hwtcl" value="12" />
+  <parameter name="pf5_class_code_hwtcl" value="0" />
+  <parameter name="pf5_device_id_hwtcl" value="0" />
+  <parameter name="pf5_exprom_bar_present_hwtcl" value="0" />
+  <parameter name="pf5_exprom_bar_size_hwtcl" value="12" />
+  <parameter name="pf5_interrupt_pin_hwtcl" value="inta" />
+  <parameter name="pf5_intr_line_hwtcl" value="0" />
+  <parameter name="pf5_msi_multi_message_capable_hwtcl" value="4" />
+  <parameter name="pf5_msix_pba_bir_hwtcl" value="0" />
+  <parameter name="pf5_msix_pba_offset_hwtcl" value="0" />
+  <parameter name="pf5_msix_table_bir_hwtcl" value="0" />
+  <parameter name="pf5_msix_table_offset_hwtcl" value="0" />
+  <parameter name="pf5_msix_table_size_hwtcl" value="0" />
+  <parameter name="pf5_pci_prog_intfc_byte_hwtcl" value="0" />
+  <parameter name="pf5_revision_id_hwtcl" value="0" />
+  <parameter name="pf5_subclass_code_hwtcl" value="0" />
+  <parameter name="pf5_subsystem_device_id_hwtcl" value="0" />
+  <parameter name="pf5_subsystem_vendor_id_hwtcl" value="0" />
+  <parameter name="pf5_vendor_id_hwtcl" value="0" />
+  <parameter name="pf5_vf_device_id_hwtcl" value="0" />
+  <parameter name="pf5_virtio_capability_present_hwtcl" value="0" />
+  <parameter name="pf5_virtio_cmn_config_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf5_virtio_cmn_config_bar_offset_hwtcl" value="0" />
+  <parameter name="pf5_virtio_cmn_config_structure_length_hwtcl" value="0" />
+  <parameter name="pf5_virtio_device_specific_cap_present_hwtcl" value="0" />
+  <parameter name="pf5_virtio_devspecific_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf5_virtio_devspecific_bar_offset_hwtcl" value="0" />
+  <parameter name="pf5_virtio_devspecific_structure_length_hwtcl" value="0" />
+  <parameter name="pf5_virtio_isrstatus_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf5_virtio_isrstatus_bar_offset_hwtcl" value="0" />
+  <parameter name="pf5_virtio_isrstatus_structure_length_hwtcl" value="0" />
+  <parameter name="pf5_virtio_notification_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf5_virtio_notification_bar_offset_hwtcl" value="0" />
+  <parameter name="pf5_virtio_notification_structure_length_hwtcl" value="0" />
+  <parameter name="pf5_virtio_pciconfig_access_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf5_virtio_pciconfig_access_bar_offset_hwtcl" value="0" />
+  <parameter name="pf5_virtio_pciconfig_access_structure_length_hwtcl" value="0" />
+  <parameter name="pf6_bar0_prefetchable_hwtcl" value="1" />
+  <parameter name="pf6_bar0_present_hwtcl" value="0" />
+  <parameter name="pf6_bar0_size_hwtcl" value="12" />
+  <parameter name="pf6_bar0_type_hwtcl" value="1" />
+  <parameter name="pf6_bar1_prefetchable_hwtcl" value="1" />
+  <parameter name="pf6_bar1_present_hwtcl" value="0" />
+  <parameter name="pf6_bar1_size_hwtcl" value="12" />
+  <parameter name="pf6_bar2_prefetchable_hwtcl" value="1" />
+  <parameter name="pf6_bar2_present_hwtcl" value="0" />
+  <parameter name="pf6_bar2_size_hwtcl" value="12" />
+  <parameter name="pf6_bar2_type_hwtcl" value="1" />
+  <parameter name="pf6_bar3_prefetchable_hwtcl" value="1" />
+  <parameter name="pf6_bar3_present_hwtcl" value="0" />
+  <parameter name="pf6_bar3_size_hwtcl" value="12" />
+  <parameter name="pf6_bar4_prefetchable_hwtcl" value="1" />
+  <parameter name="pf6_bar4_present_hwtcl" value="0" />
+  <parameter name="pf6_bar4_size_hwtcl" value="12" />
+  <parameter name="pf6_bar4_type_hwtcl" value="1" />
+  <parameter name="pf6_bar5_prefetchable_hwtcl" value="1" />
+  <parameter name="pf6_bar5_present_hwtcl" value="0" />
+  <parameter name="pf6_bar5_size_hwtcl" value="12" />
+  <parameter name="pf6_class_code_hwtcl" value="0" />
+  <parameter name="pf6_device_id_hwtcl" value="0" />
+  <parameter name="pf6_exprom_bar_present_hwtcl" value="0" />
+  <parameter name="pf6_exprom_bar_size_hwtcl" value="12" />
+  <parameter name="pf6_interrupt_pin_hwtcl" value="inta" />
+  <parameter name="pf6_intr_line_hwtcl" value="0" />
+  <parameter name="pf6_msi_multi_message_capable_hwtcl" value="4" />
+  <parameter name="pf6_msix_pba_bir_hwtcl" value="0" />
+  <parameter name="pf6_msix_pba_offset_hwtcl" value="0" />
+  <parameter name="pf6_msix_table_bir_hwtcl" value="0" />
+  <parameter name="pf6_msix_table_offset_hwtcl" value="0" />
+  <parameter name="pf6_msix_table_size_hwtcl" value="0" />
+  <parameter name="pf6_pci_prog_intfc_byte_hwtcl" value="0" />
+  <parameter name="pf6_revision_id_hwtcl" value="0" />
+  <parameter name="pf6_subclass_code_hwtcl" value="0" />
+  <parameter name="pf6_subsystem_device_id_hwtcl" value="0" />
+  <parameter name="pf6_subsystem_vendor_id_hwtcl" value="0" />
+  <parameter name="pf6_vendor_id_hwtcl" value="0" />
+  <parameter name="pf6_vf_device_id_hwtcl" value="0" />
+  <parameter name="pf6_virtio_capability_present_hwtcl" value="0" />
+  <parameter name="pf6_virtio_cmn_config_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf6_virtio_cmn_config_bar_offset_hwtcl" value="0" />
+  <parameter name="pf6_virtio_cmn_config_structure_length_hwtcl" value="0" />
+  <parameter name="pf6_virtio_device_specific_cap_present_hwtcl" value="0" />
+  <parameter name="pf6_virtio_devspecific_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf6_virtio_devspecific_bar_offset_hwtcl" value="0" />
+  <parameter name="pf6_virtio_devspecific_structure_length_hwtcl" value="0" />
+  <parameter name="pf6_virtio_isrstatus_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf6_virtio_isrstatus_bar_offset_hwtcl" value="0" />
+  <parameter name="pf6_virtio_isrstatus_structure_length_hwtcl" value="0" />
+  <parameter name="pf6_virtio_notification_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf6_virtio_notification_bar_offset_hwtcl" value="0" />
+  <parameter name="pf6_virtio_notification_structure_length_hwtcl" value="0" />
+  <parameter name="pf6_virtio_pciconfig_access_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf6_virtio_pciconfig_access_bar_offset_hwtcl" value="0" />
+  <parameter name="pf6_virtio_pciconfig_access_structure_length_hwtcl" value="0" />
+  <parameter name="pf7_bar0_prefetchable_hwtcl" value="1" />
+  <parameter name="pf7_bar0_present_hwtcl" value="0" />
+  <parameter name="pf7_bar0_size_hwtcl" value="12" />
+  <parameter name="pf7_bar0_type_hwtcl" value="1" />
+  <parameter name="pf7_bar1_prefetchable_hwtcl" value="1" />
+  <parameter name="pf7_bar1_present_hwtcl" value="0" />
+  <parameter name="pf7_bar1_size_hwtcl" value="12" />
+  <parameter name="pf7_bar2_prefetchable_hwtcl" value="1" />
+  <parameter name="pf7_bar2_present_hwtcl" value="0" />
+  <parameter name="pf7_bar2_size_hwtcl" value="12" />
+  <parameter name="pf7_bar2_type_hwtcl" value="1" />
+  <parameter name="pf7_bar3_prefetchable_hwtcl" value="1" />
+  <parameter name="pf7_bar3_present_hwtcl" value="0" />
+  <parameter name="pf7_bar3_size_hwtcl" value="12" />
+  <parameter name="pf7_bar4_prefetchable_hwtcl" value="1" />
+  <parameter name="pf7_bar4_present_hwtcl" value="0" />
+  <parameter name="pf7_bar4_size_hwtcl" value="12" />
+  <parameter name="pf7_bar4_type_hwtcl" value="1" />
+  <parameter name="pf7_bar5_prefetchable_hwtcl" value="1" />
+  <parameter name="pf7_bar5_present_hwtcl" value="0" />
+  <parameter name="pf7_bar5_size_hwtcl" value="12" />
+  <parameter name="pf7_class_code_hwtcl" value="0" />
+  <parameter name="pf7_device_id_hwtcl" value="0" />
+  <parameter name="pf7_exprom_bar_present_hwtcl" value="0" />
+  <parameter name="pf7_exprom_bar_size_hwtcl" value="12" />
+  <parameter name="pf7_interrupt_pin_hwtcl" value="inta" />
+  <parameter name="pf7_intr_line_hwtcl" value="0" />
+  <parameter name="pf7_msi_multi_message_capable_hwtcl" value="4" />
+  <parameter name="pf7_msix_pba_bir_hwtcl" value="0" />
+  <parameter name="pf7_msix_pba_offset_hwtcl" value="0" />
+  <parameter name="pf7_msix_table_bir_hwtcl" value="0" />
+  <parameter name="pf7_msix_table_offset_hwtcl" value="0" />
+  <parameter name="pf7_msix_table_size_hwtcl" value="0" />
+  <parameter name="pf7_pci_prog_intfc_byte_hwtcl" value="0" />
+  <parameter name="pf7_revision_id_hwtcl" value="0" />
+  <parameter name="pf7_subclass_code_hwtcl" value="0" />
+  <parameter name="pf7_subsystem_device_id_hwtcl" value="0" />
+  <parameter name="pf7_subsystem_vendor_id_hwtcl" value="0" />
+  <parameter name="pf7_vendor_id_hwtcl" value="0" />
+  <parameter name="pf7_vf_device_id_hwtcl" value="0" />
+  <parameter name="pf7_virtio_capability_present_hwtcl" value="0" />
+  <parameter name="pf7_virtio_cmn_config_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf7_virtio_cmn_config_bar_offset_hwtcl" value="0" />
+  <parameter name="pf7_virtio_cmn_config_structure_length_hwtcl" value="0" />
+  <parameter name="pf7_virtio_device_specific_cap_present_hwtcl" value="0" />
+  <parameter name="pf7_virtio_devspecific_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf7_virtio_devspecific_bar_offset_hwtcl" value="0" />
+  <parameter name="pf7_virtio_devspecific_structure_length_hwtcl" value="0" />
+  <parameter name="pf7_virtio_isrstatus_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf7_virtio_isrstatus_bar_offset_hwtcl" value="0" />
+  <parameter name="pf7_virtio_isrstatus_structure_length_hwtcl" value="0" />
+  <parameter name="pf7_virtio_notification_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf7_virtio_notification_bar_offset_hwtcl" value="0" />
+  <parameter name="pf7_virtio_notification_structure_length_hwtcl" value="0" />
+  <parameter name="pf7_virtio_pciconfig_access_bar_indicator_hwtcl" value="0" />
+  <parameter name="pf7_virtio_pciconfig_access_bar_offset_hwtcl" value="0" />
+  <parameter name="pf7_virtio_pciconfig_access_structure_length_hwtcl" value="0" />
+  <parameter name="pf_ats_support_hwtcl" value="0" />
+  <parameter name="pf_enable_function_msix_support_hwtcl" value="0" />
+  <parameter name="pf_msi_support_hwtcl" value="0" />
+  <parameter name="pf_tph_support_hwtcl" value="0" />
+  <parameter name="pll_refclk_freq_hwtcl" value="100 MHz" />
+  <parameter name="port_link_number_hwtcl" value="1" />
+  <parameter name="port_type_hwtcl" value="Native endpoint" />
+  <parameter name="prefetchable_mem_window_addr_width_hwtcl" value="0" />
+  <parameter name="reserved_debug_hwtcl" value="0" />
+  <parameter name="revision_id_hwtcl" value="1" />
+  <parameter name="rx_buffer_credit_alloc_hwtcl" value="Low" />
+  <parameter name="rx_cred_ctl_param_hwtcl" value="0" />
+  <parameter name="rx_polinv_soft_logic_enable" value="0" />
+  <parameter name="select_design_example_hwtcl" value="PIO" />
+  <parameter name="select_design_example_rtl_lang_hwtcl" value="Verilog" />
+  <parameter name="serial_sim_hwtcl" value="1" />
+  <parameter name="slave_address_map_0_hwtcl" value="0" />
+  <parameter name="slave_address_map_1_hwtcl" value="0" />
+  <parameter name="slave_address_map_2_hprxm_hwtcl" value="0" />
+  <parameter name="slave_address_map_2_hwtcl" value="0" />
+  <parameter name="slave_address_map_3_hwtcl" value="0" />
+  <parameter name="slave_address_map_4_hwtcl" value="0" />
+  <parameter name="slave_address_map_5_hwtcl" value="0" />
+  <parameter name="slot_clock_cfg_hwtcl" value="1" />
+  <parameter name="slot_number_hwtcl" value="0" />
+  <parameter name="slot_power_limit_hwtcl" value="0" />
+  <parameter name="slot_power_scale_hwtcl" value="0" />
+  <parameter name="speed_change_hwtcl" value="0" />
+  <parameter name="sr_iov_support_hwtcl" value="0" />
+  <parameter name="sriov2_en" value="0" />
+  <parameter name="subsystem_device_id_hwtcl" value="19980" />
+  <parameter name="subsystem_vendor_id_hwtcl" value="19995" />
+  <parameter name="surprise_down_error_support_hwtcl" value="0" />
+  <parameter name="system_page_sizes_supported_hwtcl" value="1363" />
+  <parameter name="targeted_devkit_hwtcl">Arria 10 GX FPGA Development Kit</parameter>
+  <parameter name="test_cseb_switch_hwtcl" value="0" />
+  <parameter name="tlp_insp_trg_dw0_hwtcl" value="2049" />
+  <parameter name="tlp_insp_trg_dw1_hwtcl" value="0" />
+  <parameter name="tlp_insp_trg_dw2_hwtcl" value="0" />
+  <parameter name="tlp_inspector_hwtcl" value="0" />
+  <parameter name="tlp_inspector_use_signal_probe_hwtcl" value="0" />
+  <parameter name="tlp_inspector_use_thin_rx_master" value="0" />
+  <parameter name="total_pf_count_hwtcl" value="1" />
+  <parameter name="track_rxfc_cplbuf_ovf_hwtcl" value="0" />
+  <parameter name="use_ast_parity_hwtcl" value="0" />
+  <parameter name="use_crc_forwarding_hwtcl" value="0" />
+  <parameter name="use_dynamic_design_example_hwtcl" value="1" />
+  <parameter name="use_rpbfm_pro" value="0" />
+  <parameter name="use_rx_st_be_hwtcl" value="0" />
+  <parameter name="use_tx_cons_cred_sel_hwtcl" value="0" />
+  <parameter name="user_id_hwtcl" value="0" />
+  <parameter name="user_txs_addr_width_hwtcl" value="32" />
+  <parameter name="vendor_id_hwtcl" value="4466" />
+  <parameter name="vf_ats_support_hwtcl" value="0" />
+  <parameter name="vf_msix_cap_present_hwtcl" value="0" />
+  <parameter name="vf_tph_support_hwtcl" value="0" />
+  <parameter name="vsec_cap_hwtcl" value="0" />
+  <parameter name="vsec_id_hwtcl" value="4466" />
+  <parameter name="wrala_hwtcl" value="16" />
+  <parameter name="xcvr_reconfig_hwtcl" value="0" />
+ </module>
+ <module name="clk_pld" kind="altera_clock_bridge" version="17.1" enabled="1">
+  <parameter name="DERIVED_CLOCK_RATE" value="0" />
+  <parameter name="EXPLICIT_CLOCK_RATE" value="0" />
+  <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
+ </module>
+ <module
+   name="clock_bridge_0"
+   kind="altera_clock_bridge"
+   version="17.1"
+   enabled="1">
+  <parameter name="DERIVED_CLOCK_RATE" value="125000000" />
+  <parameter name="EXPLICIT_CLOCK_RATE" value="0" />
+  <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
+ </module>
+ <connection
+   kind="avalon_streaming"
+   version="17.1"
+   start="DUT.rx_st"
+   end="APPS.rx_st" />
+ <connection
+   kind="clock"
+   version="17.1"
+   start="DUT.coreclkout_hip"
+   end="APPS.coreclkout_hip" />
+ <connection
+   kind="clock"
+   version="17.1"
+   start="APPS.pld_clk_hip"
+   end="clock_bridge_0.in_clk" />
+ <connection
+   kind="clock"
+   version="17.1"
+   start="APPS.pld_clk_hip"
+   end="DUT.pld_clk" />
+ <connection
+   kind="conduit"
+   version="17.1"
+   start="DUT.config_tl"
+   end="APPS.config_tl">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection kind="conduit" version="17.1" start="APPS.hip_rst" end="DUT.hip_rst">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="17.1"
+   start="APPS.hip_status"
+   end="DUT.hip_status">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection kind="conduit" version="17.1" start="APPS.int_msi" end="DUT.int_msi">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection
+   kind="conduit"
+   version="17.1"
+   start="APPS.power_mngt"
+   end="DUT.power_mgnt">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection kind="conduit" version="17.1" start="DUT.rx_bar" end="APPS.rx_bar_be">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <connection kind="conduit" version="17.1" start="DUT.tx_cred" end="APPS.tx_cred">
+  <parameter name="endPort" value="" />
+  <parameter name="endPortLSB" value="0" />
+  <parameter name="startPort" value="" />
+  <parameter name="startPortLSB" value="0" />
+  <parameter name="width" value="0" />
+ </connection>
+ <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
+ <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="0" />
+</system>
