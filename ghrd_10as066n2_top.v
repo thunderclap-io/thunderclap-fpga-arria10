@@ -115,20 +115,22 @@ wire [4:0] hps_pcie_a10_hip_avmm_hip_status_ltssmstate;
 //assign pcie_ep_perst = 1'b0;
 
 // connection of internal logics
-  assign fpga_led_pio     = fpga_led_internal;
+  //assign fpga_led_pio     = fpga_led_internal;
   assign stm_hw_events    = {{16{1'b0}}, fpga_dipsw_pio, fpga_led_internal, fpga_debounced_buttons};
-  assign pcie_npor_npor = ~hps_fpga_reset & pcie_ep_perst & fpga_reset_n;
+  assign pcie_npor_npor = pcie_ep_perst & fpga_reset_n; //~hps_fpga_reset & pcie_ep_perst & fpga_reset_n;
  
   //registers
   reg         L0_led;        // link status ltssm=0xf
   reg         alive_led;     // heart beat 
   reg  [1:0]  linkwidth_led; // link width, 1=x1, 2=x4, skipped x2 and ignored x8
-  reg  [25:0] alive_cnt;
-  
+  reg  [39:0] alive_cnt;
+  reg [39:0] timer;
+
   
   // connection of internal logics
   //assign pcie_perstn_out = 1'b1;
-//  assign fpga_led_pio = {L0_led, alive_led, linkwidth_led[1], ~fpga_led_internal};
+  //assign fpga_led_pio = {L0_led, alive_led, linkwidth_led[1], ~fpga_led_internal};
+  assign fpga_led_pio = timer[39:36];
   //assign sync_pcie_por_n = ~sync_pcie_por; potentailly redundant signal
   
   // logic for LED display derivation
@@ -137,13 +139,13 @@ wire [4:0] hps_pcie_a10_hip_avmm_hip_status_ltssmstate;
       L0_led        <= 1'b0;      
       alive_led     <= 1'b0;   
       linkwidth_led <= 2'h0;
-      alive_cnt     <= 26'd0;
+      alive_cnt     <= 40'd0;
       end
     else begin
       L0_led        <= ~(hps_pcie_a10_hip_avmm_hip_status_ltssmstate[3:0] == 4'hf);
-      alive_led     <= alive_cnt[25];   
+      alive_led     <= timer[39];   
       linkwidth_led <= {alive_cnt[24],alive_cnt[21]}; // tentatively assign linkwidth_led as flashing display as PCIe HIP has yet exposed the tl_cfg_sts signal
-      alive_cnt     <= alive_cnt + 1;   
+      alive_cnt     <= alive_cnt + 40'h1;   
       end
     end
 
@@ -354,6 +356,14 @@ altera_edge_detector pulse_debug_reset (
   defparam pulse_debug_reset.IGNORE_RST_WHILE_BUSY = 1;
   
 
+
+initial timer=40'h0;
+
+always @(posedge fpga_clk_100) begin
+	timer <= timer + 40'h1;
+end
+
+  
 endmodule
 
 
