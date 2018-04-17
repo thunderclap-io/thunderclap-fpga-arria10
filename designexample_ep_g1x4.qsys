@@ -70,6 +70,16 @@
  <interface name="apps_app_ctrl" internal="APPS.app_ctrl" />
  <interface name="apps_simu_mode_clkin" internal="APPS.simu_mode_clkin" />
  <interface name="clk_pld_in" internal="clk_pld.in_clk" type="clock" dir="end" />
+ <interface
+   name="dut_rx_st"
+   internal="DUT.rx_st"
+   type="avalon_streaming"
+   dir="start" />
+ <interface
+   name="dut_tx_st"
+   internal="DUT.tx_st"
+   type="avalon_streaming"
+   dir="end" />
  <interface name="hip_ctrl" internal="DUT.hip_ctrl" type="conduit" dir="end" />
  <interface name="hip_serial" internal="DUT.hip_serial" type="conduit" dir="end" />
  <interface name="pcie_rstn" internal="DUT.npor" type="conduit" dir="end" />
@@ -881,16 +891,6 @@
   <parameter name="EXPLICIT_CLOCK_RATE" value="0" />
   <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
  </module>
- <connection
-   kind="avalon_streaming"
-   version="17.1"
-   start="DUT.rx_st"
-   end="APPS.rx_st" />
- <connection
-   kind="avalon_streaming"
-   version="17.1"
-   start="APPS.tx_st"
-   end="DUT.tx_st" />
  <connection
    kind="clock"
    version="17.1"

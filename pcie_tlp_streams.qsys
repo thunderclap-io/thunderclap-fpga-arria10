@@ -1279,8 +1279,18 @@
  <connection
    kind="avalon_streaming"
    version="17.1"
+   start="pcie_ep_0.dut_rx_st"
+   end="rx_fifo.in" />
+ <connection
+   kind="avalon_streaming"
+   version="17.1"
    start="rx_fifo.out"
    end="PCIePacketReceiver.avalon_streaming_sink" />
+ <connection
+   kind="avalon_streaming"
+   version="17.1"
+   start="tx_fifo.out"
+   end="pcie_ep_0.dut_tx_st" />
  <connection kind="clock" version="17.1" start="clk_sys.clk" end="mm_bridge_0.clk" />
  <connection
    kind="clock"
