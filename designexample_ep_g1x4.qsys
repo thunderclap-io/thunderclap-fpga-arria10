@@ -70,14 +70,14 @@
  <interface name="apps_app_ctrl" internal="APPS.app_ctrl" />
  <interface name="apps_simu_mode_clkin" internal="APPS.simu_mode_clkin" />
  <interface name="clk_pld_in" internal="clk_pld.in_clk" type="clock" dir="end" />
- <interface
-   name="clock_bridge_0_out_clk"
-   internal="clock_bridge_0.out_clk"
-   type="clock"
-   dir="start" />
  <interface name="hip_ctrl" internal="DUT.hip_ctrl" type="conduit" dir="end" />
  <interface name="hip_serial" internal="DUT.hip_serial" type="conduit" dir="end" />
  <interface name="pcie_rstn" internal="DUT.npor" type="conduit" dir="end" />
+ <interface
+   name="pld_clk_hip"
+   internal="clock_bridge_0.out_clk"
+   type="clock"
+   dir="start" />
  <interface name="reconfig_xcvr_clk" internal="APPS.reconfig_xcvr_clk" />
  <interface name="reconfig_xcvr_rst" internal="APPS.reconfig_xcvr_rst" />
  <interface name="refclk" internal="DUT.refclk" type="clock" dir="end" />

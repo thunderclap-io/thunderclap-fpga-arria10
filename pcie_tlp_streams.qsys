@@ -1194,17 +1194,17 @@
    kind="designexample_ep_g1x4"
    version="1.0"
    enabled="1">
-  <parameter name="AUTO_CLK_PLD_IN_CLOCK_DOMAIN" value="4" />
+  <parameter name="AUTO_CLK_PLD_IN_CLOCK_DOMAIN" value="1" />
   <parameter name="AUTO_CLK_PLD_IN_CLOCK_RATE" value="125000000" />
-  <parameter name="AUTO_CLK_PLD_IN_RESET_DOMAIN" value="4" />
+  <parameter name="AUTO_CLK_PLD_IN_RESET_DOMAIN" value="1" />
   <parameter name="AUTO_DEVICE" value="10AS066N3F40E2SGE2" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_GENERATION_ID" value="0" />
-  <parameter name="AUTO_REFCLK_CLOCK_DOMAIN" value="2" />
+  <parameter name="AUTO_REFCLK_CLOCK_DOMAIN" value="5" />
   <parameter name="AUTO_REFCLK_CLOCK_RATE" value="0" />
-  <parameter name="AUTO_REFCLK_RESET_DOMAIN" value="2" />
-  <parameter name="AUTO_UNIQUE_ID">$${FILENAME}_pcie_ep_0</parameter>
+  <parameter name="AUTO_REFCLK_RESET_DOMAIN" value="5" />
+  <parameter name="AUTO_UNIQUE_ID">pcie_tlp_streams_pcie_ep_0</parameter>
  </module>
  <module
    name="reset_bridge_0"
@@ -1303,16 +1303,6 @@
  <connection
    kind="clock"
    version="17.1"
-   start="pcie_ep_0.clock_bridge_0_out_clk"
-   end="rx_fifo.in_clk" />
- <connection
-   kind="clock"
-   version="17.1"
-   start="pcie_ep_0.clock_bridge_0_out_clk"
-   end="tx_fifo.out_clk" />
- <connection
-   kind="clock"
-   version="17.1"
    start="pcie_ep.coreclkout_hip"
    end="reset_bridge_0.clk" />
  <connection
@@ -1335,6 +1325,16 @@
    version="17.1"
    start="clk_125.outclk0"
    end="pcie_ep_0.clk_pld_in" />
+ <connection
+   kind="clock"
+   version="17.1"
+   start="pcie_ep_0.pld_clk_hip"
+   end="rx_fifo.in_clk" />
+ <connection
+   kind="clock"
+   version="17.1"
+   start="pcie_ep_0.pld_clk_hip"
+   end="tx_fifo.out_clk" />
  <connection
    kind="reset"
    version="17.1"
