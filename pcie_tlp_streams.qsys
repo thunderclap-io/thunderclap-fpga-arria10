@@ -424,7 +424,7 @@
   <parameter name="PIPELINE_COMMAND" value="1" />
   <parameter name="PIPELINE_RESPONSE" value="1" />
   <parameter name="SYMBOL_WIDTH" value="8" />
-  <parameter name="SYSINFO_ADDR_WIDTH" value="11" />
+  <parameter name="SYSINFO_ADDR_WIDTH" value="15" />
   <parameter name="USE_AUTO_ADDRESS_WIDTH" value="1" />
   <parameter name="USE_RESPONSE" value="0" />
  </module>
@@ -1272,6 +1272,15 @@
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
+   kind="avalon"
+   version="17.1"
+   start="mm_bridge_0.m0"
+   end="pcie_ep_0.reconfig_mm">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x4000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
    kind="avalon_streaming"
    version="17.1"
    start="PCIePacketTransmitter.avalon_streaming_source"
@@ -1370,6 +1379,11 @@
    version="17.1"
    start="clk_sys.clk_reset"
    end="clk_125.reset" />
+ <connection
+   kind="reset"
+   version="17.1"
+   start="clk_sys.clk_reset"
+   end="pcie_ep_0.reset_in" />
  <connection
    kind="reset"
    version="17.1"

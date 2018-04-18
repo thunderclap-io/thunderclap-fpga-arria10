@@ -13,7 +13,7 @@
    {
       datum _sortIndex
       {
-         value = "1";
+         value = "0";
          type = "int";
       }
    }
@@ -21,7 +21,7 @@
    {
       datum _sortIndex
       {
-         value = "2";
+         value = "3";
          type = "int";
       }
       datum sopceditor_expanded
@@ -34,7 +34,7 @@
    {
       datum _sortIndex
       {
-         value = "0";
+         value = "1";
          type = "int";
       }
    }
@@ -42,7 +42,39 @@
    {
       datum _sortIndex
       {
-         value = "3";
+         value = "4";
+         type = "int";
+      }
+   }
+   element master_0
+   {
+      datum _sortIndex
+      {
+         value = "5";
+         type = "int";
+      }
+   }
+   element mm_bridge_0
+   {
+      datum _sortIndex
+      {
+         value = "7";
+         type = "int";
+      }
+   }
+   element reset_bridge_0
+   {
+      datum _sortIndex
+      {
+         value = "2";
+         type = "int";
+      }
+   }
+   element xcvr_toolkit_jtagavmm
+   {
+      datum _sortIndex
+      {
+         value = "6";
          type = "int";
       }
    }
@@ -88,9 +120,15 @@
    internal="clock_bridge_0.out_clk"
    type="clock"
    dir="start" />
+ <interface name="reconfig_mm" internal="mm_bridge_0.s0" type="avalon" dir="end" />
  <interface name="reconfig_xcvr_clk" internal="APPS.reconfig_xcvr_clk" />
  <interface name="reconfig_xcvr_rst" internal="APPS.reconfig_xcvr_rst" />
  <interface name="refclk" internal="DUT.refclk" type="clock" dir="end" />
+ <interface
+   name="reset_in"
+   internal="reset_bridge_0.in_reset"
+   type="reset"
+   dir="end" />
  <module name="APPS" kind="altera_pcie_a10_ed" version="17.1" enabled="1">
   <parameter name="INTENDED_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="ast_width_hwtcl" value="Avalon-ST 64-bit" />
@@ -118,7 +156,7 @@
  </module>
  <module name="DUT" kind="altera_pcie_a10_hip" version="17.1" enabled="1">
   <parameter name="AUTO_RXM_IRQ_INTERRUPTS_USED" value="-1" />
-  <parameter name="adme_enable_hwtcl" value="0" />
+  <parameter name="adme_enable_hwtcl" value="1" />
   <parameter name="advance_error_reporting_hwtcl" value="1" />
   <parameter name="apps_type_hwtcl" value="0" />
   <parameter name="ari_support_hwtcl" value="0" />
@@ -177,7 +215,7 @@
   <parameter name="enable_ast_trs_hwtcl" value="0" />
   <parameter name="enable_avst_reset_hwtcl" value="0" />
   <parameter name="enable_custom_features_hwtcl" value="0" />
-  <parameter name="enable_devkit_conduit_hwtcl" value="0" />
+  <parameter name="enable_devkit_conduit_hwtcl" value="1" />
   <parameter name="enable_example_design_qii_hwtcl" value="0" />
   <parameter name="enable_example_design_sim_hwtcl" value="0" />
   <parameter name="enable_example_design_synth_hwtcl" value="0" />
@@ -875,7 +913,7 @@
   <parameter name="vsec_cap_hwtcl" value="0" />
   <parameter name="vsec_id_hwtcl" value="4466" />
   <parameter name="wrala_hwtcl" value="16" />
-  <parameter name="xcvr_reconfig_hwtcl" value="0" />
+  <parameter name="xcvr_reconfig_hwtcl" value="1" />
  </module>
  <module name="clk_pld" kind="altera_clock_bridge" version="17.1" enabled="1">
   <parameter name="DERIVED_CLOCK_RATE" value="0" />
@@ -891,11 +929,148 @@
   <parameter name="EXPLICIT_CLOCK_RATE" value="0" />
   <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
  </module>
+ <module
+   name="master_0"
+   kind="altera_jtag_avalon_master"
+   version="17.1"
+   enabled="0">
+  <parameter name="AUTO_DEVICE" value="10AS066N3F40E2SGE2" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
+  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
+  <parameter name="COMPONENT_CLOCK" value="0" />
+  <parameter name="FAST_VER" value="0" />
+  <parameter name="FIFO_DEPTHS" value="2" />
+  <parameter name="PLI_PORT" value="50000" />
+  <parameter name="USE_PLI" value="0" />
+ </module>
+ <module
+   name="mm_bridge_0"
+   kind="altera_avalon_mm_bridge"
+   version="17.1"
+   enabled="1">
+  <parameter name="ADDRESS_UNITS" value="SYMBOLS" />
+  <parameter name="ADDRESS_WIDTH" value="10" />
+  <parameter name="DATA_WIDTH" value="32" />
+  <parameter name="LINEWRAPBURSTS" value="0" />
+  <parameter name="MAX_BURST_SIZE" value="1" />
+  <parameter name="MAX_PENDING_RESPONSES" value="4" />
+  <parameter name="PIPELINE_COMMAND" value="1" />
+  <parameter name="PIPELINE_RESPONSE" value="1" />
+  <parameter name="SYMBOL_WIDTH" value="8" />
+  <parameter name="SYSINFO_ADDR_WIDTH" value="14" />
+  <parameter name="USE_AUTO_ADDRESS_WIDTH" value="1" />
+  <parameter name="USE_RESPONSE" value="0" />
+ </module>
+ <module
+   name="reset_bridge_0"
+   kind="altera_reset_bridge"
+   version="17.1"
+   enabled="1">
+  <parameter name="ACTIVE_LOW_RESET" value="0" />
+  <parameter name="AUTO_CLK_CLOCK_RATE" value="0" />
+  <parameter name="NUM_RESET_OUTPUTS" value="1" />
+  <parameter name="SYNCHRONOUS_EDGES" value="deassert" />
+  <parameter name="USE_RESET_REQUEST" value="0" />
+ </module>
+ <module
+   name="xcvr_toolkit_jtagavmm"
+   kind="altera_jtag_avalon_master"
+   version="17.1"
+   enabled="1">
+  <parameter name="AUTO_DEVICE" value="10AS066N3F40E2SGE2" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
+  <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
+  <parameter name="COMPONENT_CLOCK" value="0" />
+  <parameter name="FAST_VER" value="0" />
+  <parameter name="FIFO_DEPTHS" value="2" />
+  <parameter name="PLI_PORT" value="50000" />
+  <parameter name="USE_PLI" value="0" />
+ </module>
+ <connection
+   kind="avalon"
+   version="17.1"
+   start="mm_bridge_0.m0"
+   end="DUT.reconfig_pll0">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x1000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="17.1"
+   start="mm_bridge_0.m0"
+   end="DUT.reconfig_pll1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x2000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="17.1"
+   start="mm_bridge_0.m0"
+   end="DUT.xcvr_reconfig">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="17.1"
+   start="master_0.master"
+   end="DUT.xcvr_reconfig">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="17.1"
+   start="xcvr_toolkit_jtagavmm.master"
+   end="DUT.xcvr_reconfig">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
  <connection
    kind="clock"
    version="17.1"
    start="DUT.coreclkout_hip"
    end="APPS.coreclkout_hip" />
+ <connection
+   kind="clock"
+   version="17.1"
+   start="clk_pld.out_clk"
+   end="reset_bridge_0.clk" />
+ <connection
+   kind="clock"
+   version="17.1"
+   start="clk_pld.out_clk"
+   end="master_0.clk" />
+ <connection
+   kind="clock"
+   version="17.1"
+   start="clk_pld.out_clk"
+   end="xcvr_toolkit_jtagavmm.clk" />
+ <connection
+   kind="clock"
+   version="17.1"
+   start="clk_pld.out_clk"
+   end="mm_bridge_0.clk" />
+ <connection
+   kind="clock"
+   version="17.1"
+   start="clk_pld.out_clk"
+   end="DUT.reconfig_pll0_clk" />
+ <connection
+   kind="clock"
+   version="17.1"
+   start="clk_pld.out_clk"
+   end="DUT.reconfig_pll1_clk" />
+ <connection
+   kind="clock"
+   version="17.1"
+   start="clk_pld.out_clk"
+   end="DUT.xcvr_reconfig_clk" />
  <connection
    kind="clock"
    version="17.1"
@@ -967,6 +1142,51 @@
   <parameter name="startPortLSB" value="0" />
   <parameter name="width" value="0" />
  </connection>
+ <connection
+   kind="reset"
+   version="17.1"
+   start="xcvr_toolkit_jtagavmm.master_reset"
+   end="DUT.reconfig_pll1_reset" />
+ <connection
+   kind="reset"
+   version="17.1"
+   start="master_0.master_reset"
+   end="DUT.xcvr_reconfig_reset" />
+ <connection
+   kind="reset"
+   version="17.1"
+   start="xcvr_toolkit_jtagavmm.master_reset"
+   end="DUT.xcvr_reconfig_reset" />
+ <connection
+   kind="reset"
+   version="17.1"
+   start="reset_bridge_0.out_reset"
+   end="master_0.clk_reset" />
+ <connection
+   kind="reset"
+   version="17.1"
+   start="reset_bridge_0.out_reset"
+   end="xcvr_toolkit_jtagavmm.clk_reset" />
+ <connection
+   kind="reset"
+   version="17.1"
+   start="reset_bridge_0.out_reset"
+   end="DUT.reconfig_pll0_reset" />
+ <connection
+   kind="reset"
+   version="17.1"
+   start="reset_bridge_0.out_reset"
+   end="DUT.reconfig_pll1_reset" />
+ <connection
+   kind="reset"
+   version="17.1"
+   start="reset_bridge_0.out_reset"
+   end="mm_bridge_0.reset" />
+ <connection
+   kind="reset"
+   version="17.1"
+   start="reset_bridge_0.out_reset"
+   end="DUT.xcvr_reconfig_reset" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="0" />
 </system>
