@@ -46,6 +46,14 @@
          type = "int";
       }
    }
+   element jtag_uart_0
+   {
+      datum _sortIndex
+      {
+         value = "8";
+         type = "int";
+      }
+   }
    element master_0
    {
       datum _sortIndex
@@ -67,6 +75,14 @@
       datum _sortIndex
       {
          value = "2";
+         type = "int";
+      }
+   }
+   element sysid_qsys_0
+   {
+      datum _sortIndex
+      {
+         value = "9";
          type = "int";
       }
    }
@@ -930,6 +946,25 @@
   <parameter name="NUM_CLOCK_OUTPUTS" value="1" />
  </module>
  <module
+   name="jtag_uart_0"
+   kind="altera_avalon_jtag_uart"
+   version="17.1"
+   enabled="1">
+  <parameter name="allowMultipleConnections" value="false" />
+  <parameter name="avalonSpec" value="2.0" />
+  <parameter name="clkFreq" value="0" />
+  <parameter name="hubInstanceID" value="0" />
+  <parameter name="readBufferDepth" value="64" />
+  <parameter name="readIRQThreshold" value="8" />
+  <parameter name="simInputCharacterStream" value="" />
+  <parameter name="simInteractiveOptions">NO_INTERACTIVE_WINDOWS</parameter>
+  <parameter name="useRegistersForReadBuffer" value="false" />
+  <parameter name="useRegistersForWriteBuffer" value="false" />
+  <parameter name="useRelativePathForSimFile" value="false" />
+  <parameter name="writeBufferDepth" value="64" />
+  <parameter name="writeIRQThreshold" value="8" />
+ </module>
+ <module
    name="master_0"
    kind="altera_jtag_avalon_master"
    version="17.1"
@@ -973,6 +1008,13 @@
   <parameter name="USE_RESET_REQUEST" value="0" />
  </module>
  <module
+   name="sysid_qsys_0"
+   kind="altera_avalon_sysid_qsys"
+   version="17.1"
+   enabled="1">
+  <parameter name="id" value="319760" />
+ </module>
+ <module
    name="xcvr_toolkit_jtagavmm"
    kind="altera_jtag_avalon_master"
    version="17.1"
@@ -986,6 +1028,24 @@
   <parameter name="PLI_PORT" value="50000" />
   <parameter name="USE_PLI" value="0" />
  </module>
+ <connection
+   kind="avalon"
+   version="17.1"
+   start="mm_bridge_0.m0"
+   end="jtag_uart_0.avalon_jtag_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x3000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="17.1"
+   start="mm_bridge_0.m0"
+   end="sysid_qsys_0.control_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x3010" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
  <connection
    kind="avalon"
    version="17.1"
@@ -1056,6 +1116,16 @@
    version="17.1"
    start="clk_pld.out_clk"
    end="mm_bridge_0.clk" />
+ <connection
+   kind="clock"
+   version="17.1"
+   start="clk_pld.out_clk"
+   end="jtag_uart_0.clk" />
+ <connection
+   kind="clock"
+   version="17.1"
+   start="clk_pld.out_clk"
+   end="sysid_qsys_0.clk" />
  <connection
    kind="clock"
    version="17.1"
@@ -1182,6 +1252,16 @@
    version="17.1"
    start="reset_bridge_0.out_reset"
    end="mm_bridge_0.reset" />
+ <connection
+   kind="reset"
+   version="17.1"
+   start="reset_bridge_0.out_reset"
+   end="jtag_uart_0.reset" />
+ <connection
+   kind="reset"
+   version="17.1"
+   start="reset_bridge_0.out_reset"
+   end="sysid_qsys_0.reset" />
  <connection
    kind="reset"
    version="17.1"
