@@ -13,7 +13,7 @@
    {
       datum _sortIndex
       {
-         value = "12";
+         value = "13";
          type = "int";
       }
    }
@@ -37,7 +37,7 @@
    {
       datum _sortIndex
       {
-         value = "15";
+         value = "16";
          type = "int";
       }
    }
@@ -45,7 +45,7 @@
    {
       datum _sortIndex
       {
-         value = "0";
+         value = "1";
          type = "int";
       }
    }
@@ -157,7 +157,7 @@
    {
       datum _sortIndex
       {
-         value = "13";
+         value = "14";
          type = "int";
       }
    }
@@ -189,7 +189,7 @@
    {
       datum _sortIndex
       {
-         value = "14";
+         value = "15";
          type = "int";
       }
    }
@@ -197,7 +197,15 @@
    {
       datum _sortIndex
       {
-         value = "1";
+         value = "0";
+         type = "int";
+      }
+   }
+   element reset_pio
+   {
+      datum _sortIndex
+      {
+         value = "12";
          type = "int";
       }
    }
@@ -316,6 +324,11 @@
  <interface
    name="pio_led_external_connection"
    internal="led_pio.external_connection"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="pio_reset_external_connection"
+   internal="reset_pio.external_connection"
    type="conduit"
    dir="end" />
  <interface name="reset" internal="clk_0.clk_in_reset" type="reset" dir="end" />
@@ -1971,6 +1984,20 @@
   <parameter name="SYNCHRONOUS_EDGES" value="deassert" />
   <parameter name="USE_RESET_REQUEST" value="0" />
  </module>
+ <module name="reset_pio" kind="altera_avalon_pio" version="17.1" enabled="1">
+  <parameter name="bitClearingEdgeCapReg" value="true" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="true" />
+  <parameter name="clockRate" value="100000000" />
+  <parameter name="direction" value="Output" />
+  <parameter name="edgeType" value="ANY" />
+  <parameter name="generateIRQ" value="true" />
+  <parameter name="irqType" value="EDGE" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="8" />
+ </module>
  <module
    name="sysid_qsys_0"
    kind="altera_avalon_sysid_qsys"
@@ -2038,6 +2065,11 @@
   <parameter name="baseAddress" value="0x0030" />
   <parameter name="defaultConnection" value="false" />
  </connection>
+ <connection kind="avalon" version="17.1" start="pb_lwh2f.m0" end="reset_pio.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0040" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
  <connection
    kind="avalon"
    version="17.1"
@@ -2082,6 +2114,7 @@
    version="17.1"
    start="clk_0.clk"
    end="pcie_tlp_buffer.clk" />
+ <connection kind="clock" version="17.1" start="clk_0.clk" end="reset_pio.clk" />
  <connection
    kind="clock"
    version="17.1"
@@ -2193,6 +2226,11 @@
    kind="reset"
    version="17.1"
    start="clk_0.clk_reset"
+   end="reset_pio.reset" />
+ <connection
+   kind="reset"
+   version="17.1"
+   start="clk_0.clk_reset"
    end="onchip_memory2_0.reset1" />
  <connection kind="reset" version="17.1" start="clk_0.clk_reset" end="ILC.reset_n" />
  <connection
@@ -2240,6 +2278,11 @@
    version="17.1"
    start="arria10_hps_0.h2f_reset"
    end="dipsw_pio.reset" />
+ <connection
+   kind="reset"
+   version="17.1"
+   start="arria10_hps_0.h2f_reset"
+   end="reset_pio.reset" />
  <connection
    kind="reset"
    version="17.1"
