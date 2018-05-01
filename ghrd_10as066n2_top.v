@@ -104,6 +104,8 @@ module ghrd_10as066n2_top (
   wire        hps_cold_reset;
   wire        hps_warm_reset;
   wire        hps_debug_reset;
+  wire [7:0]  reset_pio;
+  wire        pcie_npor_pio_h;
 
 wire	pcie_npor_npor;
 wire coreclk_fanout_clk;
@@ -116,8 +118,10 @@ wire [4:0] hps_pcie_a10_hip_avmm_hip_status_ltssmstate;
 
 // connection of internal logics
   //assign fpga_led_pio     = fpga_led_internal;
+  // soft reset wire from PIO
+  assign pcie_npor_pio_h = reset_pio[0]; // active high
   assign stm_hw_events    = {{16{1'b0}}, fpga_dipsw_pio, fpga_led_internal, fpga_debounced_buttons};
-  assign pcie_npor_npor = pcie_ep_perst & fpga_reset_n; //~hps_fpga_reset & pcie_ep_perst & fpga_reset_n;
+  assign pcie_npor_npor = pcie_ep_perst & fpga_reset_n & ~pcie_npor_pio_h; //~hps_fpga_reset & pcie_ep_perst & fpga_reset_n;
  
   //registers
   reg         L0_led;        // link status ltssm=0xf
@@ -309,7 +313,9 @@ ghrd_10as066n2 soc_inst (
   .issp_hps_resets_source                        (hps_reset_req),
   .f2h_cold_reset_req_reset_n                    (~hps_cold_reset),
   .f2h_warm_reset_req_reset_n                    (~hps_warm_reset),
-  .f2h_debug_reset_req_reset_n                   (~hps_debug_reset)
+  .f2h_debug_reset_req_reset_n                   (~hps_debug_reset),
+  .pio_reset_external_connection_export          (reset_pio),          //         pio_reset_external_connection.export
+
 );  
 
 // Debounce logic to clean out glitches within 1ms
