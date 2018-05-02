@@ -57,6 +57,8 @@ transceivers.
 
 # Building the FPGA via Quartus GUI
 
+Tested with Quartus 17.1 standard (not Lite or Pro).
+
 1. Open in Qsys/Platform Designer:
 ```
 qsys-edit ghrd_10as066n2.qsys
