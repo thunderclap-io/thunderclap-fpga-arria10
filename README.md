@@ -57,18 +57,22 @@ transceivers.
 
 # Building the FPGA via Quartus GUI
 
-Tested with Quartus 17.1 standard (not Lite or Pro).
+Tested with Quartus 17.1 standard (not Lite or Pro).  Needs BSV compiler:
 
-1. Open in Qsys/Platform Designer:
+1. 
+```
+make -C pcie-bsv/bsv/MMRingBuffer
+```
+2. Open in Qsys/Platform Designer:
 ```
 qsys-edit ghrd_10as066n2.qsys
 ```
-2. Press the Generate HDL... button
-3. Open in Quartus:
+3. Press the Generate HDL... button
+4. Open in Quartus:
 ```
 quartus ghrd_10as066n2 &
 ```
-4. Processing -> Start Compilation
+5. Processing -> Start Compilation
 
 
 # Building the SD card image
