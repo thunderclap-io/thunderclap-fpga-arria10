@@ -78,11 +78,17 @@ quartus ghrd_10as066n2 &
 # Building the SD card image
 
 First build your FPGA bitfile with Quartus.  Then fetch and build the
-necessary components to generate a suitable SD card:
+necessary components to generate a suitable SD card (requires sudo and
+Quartus's embedded tools installed):
 
 ```
+sudo whoami # prompt early so we aren't interrupted
+export SOCEDS_DEST_ROOT=$QUARTUS_ROOTDIR/../embedded
+. $SOCEDS_DEST_ROOT/env.sh
 git clone https://github.com/CTSRD-CHERI/pcie-probe-software.git
 mkdir sdcard
 cd sdcard
 ../pcie-probe-software/scripts/socfpga/build_ubuntu_sdcard.sh ../pcie-fpga-arria10-socdevkit ghrd_10as066n2
 ```
+
+You may need to install Ubuntu package libssl-dev to build the Linux kernel.
