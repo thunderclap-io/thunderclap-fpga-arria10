@@ -121,7 +121,7 @@ wire [4:0] hps_pcie_a10_hip_avmm_hip_status_ltssmstate;
   // soft reset wire from PIO
   assign pcie_npor_pio_h = reset_pio[0]; // active high
   assign stm_hw_events    = {{16{1'b0}}, fpga_dipsw_pio, fpga_led_internal, fpga_debounced_buttons};
-  assign pcie_npor_npor = pcie_ep_perst & fpga_reset_n & ~pcie_npor_pio_h; //~hps_fpga_reset & pcie_ep_perst & fpga_reset_n;
+  assign pcie_npor_npor = pcie_ep_perst & fpga_reset_n; // & ~pcie_npor_pio_h; //~hps_fpga_reset & pcie_ep_perst & fpga_reset_n;
  
   //registers
   reg         L0_led;        // link status ltssm=0xf

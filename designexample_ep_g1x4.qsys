@@ -213,7 +213,7 @@
   <parameter name="completion_timeout_disable_hwtcl" value="1" />
   <parameter name="completion_timeout_hwtcl" value="BCD" />
   <parameter name="cseb_autonomous_hwtcl" value="0" />
-  <parameter name="cseb_config_bypass_gui_hwtcl" value="0" />
+  <parameter name="cseb_config_bypass_gui_hwtcl" value="1" />
   <parameter name="cseb_extend_pci_hwtcl" value="0" />
   <parameter name="cseb_extend_pcie_hwtcl" value="0" />
   <parameter name="cvp_enable_hwtcl" value="0" />
@@ -1151,17 +1151,6 @@
    version="17.1"
    start="APPS.pld_clk_hip"
    end="DUT.pld_clk" />
- <connection
-   kind="conduit"
-   version="17.1"
-   start="DUT.config_tl"
-   end="APPS.config_tl">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
  <connection kind="conduit" version="17.1" start="APPS.hip_rst" end="DUT.hip_rst">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
@@ -1174,24 +1163,6 @@
    version="17.1"
    start="APPS.hip_status"
    end="DUT.hip_status">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection kind="conduit" version="17.1" start="APPS.int_msi" end="DUT.int_msi">
-  <parameter name="endPort" value="" />
-  <parameter name="endPortLSB" value="0" />
-  <parameter name="startPort" value="" />
-  <parameter name="startPortLSB" value="0" />
-  <parameter name="width" value="0" />
- </connection>
- <connection
-   kind="conduit"
-   version="17.1"
-   start="APPS.power_mngt"
-   end="DUT.power_mgnt">
   <parameter name="endPort" value="" />
   <parameter name="endPortLSB" value="0" />
   <parameter name="startPort" value="" />

@@ -145,6 +145,14 @@
          type = "String";
       }
    }
+   element ghrd_10as066n2
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Arria 10";
+         type = "String";
+      }
+   }
    element hps_only_master
    {
       datum _sortIndex
