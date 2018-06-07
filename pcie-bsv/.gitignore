@@ -1,0 +1,11 @@
+*~
+*.bsp
+*.rpt
+db/
+incremental_db/
+*.smsg
+*.ddb
+*.summary
+bsv/MMRingBuffer/*.v
+*.bo
+qsys_ip
