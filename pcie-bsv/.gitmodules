@@ -1,3 +1,0 @@
-[submodule "software/pcie-probe"]
-	path = software/pcie-probe
-	url = /home/cr437/public_html/git/pcie-probe.git
