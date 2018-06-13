@@ -82,11 +82,11 @@ module mkPCIePacketReceiver(PCIePacketReceiver);
                     end
                 2:  begin
 //                        response = {38'b0, pack(rxfifo.first().eof), pack(rxfifo.first().sof), rxfifo.first().be, 8'b0, 8'b0}; //rxfifo.first().parity,  rxfifo.first().bar};
-                        response = byteSwap64({rxfifo.first().eof ? 8'hEE:8'h0, rxfifo.first().sof ? 8'h55:8'h0, 22'b0,
-				pack(rxfifo.first().eof), pack(rxfifo.first().sof), rxfifo.first().be, 8'b0, 8'b0}); //rxfifo.first().parity,  rxfifo.first().bar};
+                        response = {rxfifo.first().eof ? 8'hEE:8'h0, rxfifo.first().sof ? 8'h55:8'h0, 22'b0,
+				pack(rxfifo.first().eof), pack(rxfifo.first().sof), rxfifo.first().be, 8'b0, 8'b0}; //rxfifo.first().parity,  rxfifo.first().bar};
                     end
                 3:  begin
-                        response = byteSwap64(signExtend(pack(rxfifo.notEmpty)));
+                        response = signExtend(pack(rxfifo.notEmpty));
                     end
             endcase
 	responseWrapped = response;	// convert from a data word into a response packet
@@ -94,15 +94,19 @@ module mkPCIePacketReceiver(PCIePacketReceiver);
         end
 
         else if (req matches tagged AvalonWrite{ writedata:.data, address:.address, byteenable:.be, burstcount:.burstcount})
+	begin
             $display("write %x",address);
+            // never block writes
+            slave.client.response.put(responseWrapped);
+	end
 //        $display("address=%x", address);
 
     endrule
 
     rule fetchpcieword;
         PCIeWord pciedataUnswapped <- streamToFIFO.receive.get();
-	PCIeWord pciedataSwapped;
-
+	PCIeWord pciedataSwapped = pciedataUnswapped;
+/* // don't byte-swap data
 	pciedataSwapped.sof = pciedataUnswapped.sof;
 	pciedataSwapped.eof = pciedataUnswapped.eof;
 	pciedataSwapped.hit = pciedataUnswapped.hit;
@@ -138,7 +142,7 @@ module mkPCIePacketReceiver(PCIePacketReceiver);
 	// in all data words the byte enables are reversed, and they are ignore for header words.
 	// so swap them assuming they're always data
 	pciedataSwapped.be = pciedataUnswapped.be;
-
+*/
         if (rxfifo.notFull)
         begin
             rxfifo.enq(pciedataSwapped);

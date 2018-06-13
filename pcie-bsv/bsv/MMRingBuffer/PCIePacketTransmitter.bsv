@@ -76,7 +76,7 @@ module mkPCIePacketTransmitter(PCIePacketTransmitter);
         if (req matches tagged AvalonWrite { address:.address, byteenable:.be, burstcount:.burstcount})
         begin
 	    // for words which we want to transfer verbatim from BERI, we have to 
-	    DataType writedataBERI = byteSwap64(req.AvalonWrite.writedata);
+	    DataType writedataBERI = req.AvalonWrite.writedata;
             $display("write %x",address);
             case (address)
                 0:  begin
@@ -122,8 +122,8 @@ module mkPCIePacketTransmitter(PCIePacketTransmitter);
             PCIeWord pciedataUnswapped = txfifo.first();
             txfifo.deq();
 
-	    PCIeWord pciedataSwapped;
-
+	    PCIeWord pciedataSwapped = pciedataUnswapped;
+/* // remove hardware byte swapping
 	    pciedataSwapped.sof = pciedataUnswapped.sof;
 	    pciedataSwapped.eof = pciedataUnswapped.eof;
 	    pciedataSwapped.hit = pciedataUnswapped.hit;
@@ -168,7 +168,7 @@ module mkPCIePacketTransmitter(PCIePacketTransmitter);
 	    // so swap them assuming they're always data
 	    //pciedataSwapped.be = reverseBits(pciedataUnswapped.be);
 	    pciedataSwapped.be = pciedataUnswapped.be;
-
+*/
 
             fifoToStream.send.put(pciedataSwapped);
             $display("PCIe word[%d] received from MM=%x, sent swapped=%x", dwordCounter, pciedataUnswapped, pciedataSwapped);
@@ -247,7 +247,7 @@ module mkPCIePacketTransmitterTB(PCIePacketTransmitterTB);
 	if (address == 3) begin
 	   data[0] = 1;
 	end
-        dut.mmSlave.avs(byteSwap64(data), address, False, writing, 1, 0);
+        dut.mmSlave.avs(data, address, False, writing, 1, 0);
         writing <= !writing;
         if (writing)
             $display("%d: write request addr %x, BERI data=%x, avalon data=%x, sopin=%x, eopin=%x, bein=%x, wordCounter=%d",
