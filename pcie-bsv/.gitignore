@@ -6,6 +6,5 @@ incremental_db/
 *.smsg
 *.ddb
 *.summary
-bsv/MMRingBuffer/*.v
+bsv/PCIePipes/*.v
 *.bo
-qsys_ip
