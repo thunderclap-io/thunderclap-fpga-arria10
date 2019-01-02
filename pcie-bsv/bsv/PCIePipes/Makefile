@@ -1,7 +1,7 @@
 BSC=bsc
 LIBS=../../
 BSCFLAGS=-keep-fires -cross-info -aggressive-conditions -p +:$(LIBS)
-VERILOGDEST=../qsys_ip/MMRingBuffer
+VERILOGDEST=../qsys_ip/PCIePipes
 
 #all: $(VERILOGDEST) $(VERILOGDEST)/mkMMRingBuffer.v $(VERILOGDEST)/mkMMRingBufferSink.v $(VERILOGDEST)/mkMMRingBufferSource.v
 all: $(VERILOGDEST) $(VERILOGDEST)/mkPCIePacketReceiver.v $(VERILOGDEST)/mkPCIePacketTransmitter.v
