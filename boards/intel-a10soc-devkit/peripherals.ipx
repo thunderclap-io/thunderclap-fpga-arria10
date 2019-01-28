@@ -3,5 +3,5 @@
 <path
    path="../../pcie-bsv/bsv/qsys_ip/**/*" />
 <path
-   path="../qsys/*" />
+   path="../../qsys/*" />
 </library>

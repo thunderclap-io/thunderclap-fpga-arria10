@@ -244,7 +244,7 @@
 }
 ]]></parameter>
  <parameter name="clockCrossingAdapter" value="FIFO" />
- <parameter name="device" value="10AS066N3F40E2SGE2" />
+ <parameter name="device" value="10AS066N3F40E2SG" />
  <parameter name="deviceFamily" value="Arria 10" />
  <parameter name="deviceSpeedGrade" value="2" />
  <parameter name="fabricMode" value="QSYS" />
@@ -577,7 +577,7 @@
   <parameter name="USB1_Mode" value="N/A" />
   <parameter name="USB1_PinMuxing" value="Unused" />
   <parameter name="USE_DEFAULT_MPU_CLK" value="false" />
-  <parameter name="device_name" value="10AS066N3F40E2SGE2" />
+  <parameter name="device_name" value="10AS066N3F40E2SG" />
   <parameter name="eosc1_clk_mhz" value="25.0" />
   <parameter name="quartus_ini_hps_ip_boot_from_fpga_ready" value="false" />
   <parameter name="quartus_ini_hps_ip_enable_a10_advanced_options" value="false" />
@@ -820,7 +820,7 @@
   <parameter name="gui_usr_device_speed_grade" value="1" />
   <parameter name="gui_vco_frequency" value="600.0" />
   <parameter name="hp_qsys_scripting_mode" value="false" />
-  <parameter name="system_info_device_component" value="10AS066N3F40E2SGE2" />
+  <parameter name="system_info_device_component" value="10AS066N3F40E2SG" />
   <parameter name="system_info_device_family" value="Arria 10" />
   <parameter name="system_info_device_speed_grade" value="2" />
   <parameter name="system_part_trait_speed_grade" value="2" />
@@ -1867,7 +1867,7 @@
   <parameter name="PLL_USER_NUM_OF_EXTRA_CLKS" value="0" />
   <parameter name="PROTOCOL_ENUM" value="PROTOCOL_DDR4" />
   <parameter name="SHORT_QSYS_INTERFACE_NAMES" value="false" />
-  <parameter name="SYS_INFO_DEVICE" value="10AS066N3F40E2SGE2" />
+  <parameter name="SYS_INFO_DEVICE" value="10AS066N3F40E2SG" />
   <parameter name="SYS_INFO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="SYS_INFO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="SYS_INFO_UNIQUE_ID">$${FILENAME}_emif_a10_hps_0</parameter>
@@ -1878,7 +1878,7 @@
    kind="altera_jtag_avalon_master"
    version="17.1"
    enabled="1">
-  <parameter name="AUTO_DEVICE" value="10AS066N3F40E2SGE2" />
+  <parameter name="AUTO_DEVICE" value="10AS066N3F40E2SG" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="COMPONENT_CLOCK" value="0" />
@@ -1988,7 +1988,7 @@
   <parameter name="AUTO_CLK_CLOCK_DOMAIN" value="2" />
   <parameter name="AUTO_CLK_CLOCK_RATE" value="100000000" />
   <parameter name="AUTO_CLK_RESET_DOMAIN" value="2" />
-  <parameter name="AUTO_DEVICE" value="10AS066N3F40E2SGE2" />
+  <parameter name="AUTO_DEVICE" value="10AS066N3F40E2SG" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Arria 10" />
   <parameter name="AUTO_DEVICE_SPEEDGRADE" value="2" />
   <parameter name="AUTO_GENERATION_ID" value="0" />
