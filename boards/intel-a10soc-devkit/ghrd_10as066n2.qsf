@@ -3,7 +3,7 @@ set_global_assignment -name DEVICE 10AS066N3F40E2SG
 set_global_assignment -name TOP_LEVEL_ENTITY ghrd_10as066n2_top
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 15.1.1
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "10:23:04  JANUARY 13, 2016"
-set_global_assignment -name LAST_QUARTUS_VERSION "17.1.1 Standard Edition"
+set_global_assignment -name LAST_QUARTUS_VERSION "18.1.0 Standard Edition"
 set_global_assignment -name QIP_FILE ghrd_10as066n2/ghrd_10as066n2.qip
 set_global_assignment -name VERILOG_FILE ghrd_10as066n2_top.v
 set_global_assignment -name VERILOG_FILE ip/debounce/debounce.v
