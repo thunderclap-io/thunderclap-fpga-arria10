@@ -309,7 +309,7 @@ set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to pcie
 set_location_assignment PIN_AT38 -to "pcie_ep_tx_out2(n)"
 set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to pcie_ep_tx_out1
 set_location_assignment PIN_AT34 -to "pcie_ep_tx_out1(n)"
-set_global_assignment -name SEARCH_PATH /local/ecad/bluespec/current/lib/Verilog
+set_global_assignment -name SEARCH_PATH ../../lib
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 100
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"

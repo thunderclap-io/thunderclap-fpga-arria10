@@ -585,8 +585,7 @@ set_global_assignment -name MAX_CORE_JUNCTION_TEMP 100
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 
-#set_global_assignment -name SEARCH_PATH /local/ecad/bluespec/current/lib/Verilog.Quartus
-#set_global_assignment -name SEARCH_PATH /local/ecad/bluespec/current/lib/Verilog
+set_global_assignment -name SEARCH_PATH ../../lib
 set_location_assignment PIN_R24 -to PCIE_REFCLK_p
 set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to PCIE_RX_p[0]
 set_instance_assignment -name IO_STANDARD "HIGH SPEED DIFFERENTIAL I/O" -to PCIE_TX_p[0]
