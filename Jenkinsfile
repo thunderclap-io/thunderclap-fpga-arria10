@@ -12,7 +12,7 @@ for(int i=0; i < boards.size(); i++) {
 			println "Building for ${board}"
 			println "Node=${env.NODE_NAME}"
 			sh '''#!/bin/bash
-				source /local/ecad/setup.sh 18.1std
+				source /local/ecad/setup.bash 18.1std
 				make ${board}
 			'''
 		}
