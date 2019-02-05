@@ -11,6 +11,7 @@ for(int i=0; i < boards.size(); i++) {
 			def board = boardValue
 			println "Building for ${board}"
 			println "Node=${env.NODE_NAME}"
+			checkout scm
 			sh '''#!/bin/bash
 				source /local/ecad/setup.bash 18.1
 				ls -l
