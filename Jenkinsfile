@@ -17,6 +17,7 @@ for(int i=0; i < boards.size(); i++) {
 				ls -l
 				make ${board}
 			'''
+			archiveArtifacts 'boards/${board}/output_files/*.sof boards/${board}/output_files/*.rbf'
 		}
 	}
 }
