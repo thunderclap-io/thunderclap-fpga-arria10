@@ -1,20 +1,20 @@
-pipeline {
-	agent any
-	parameters {
-		string(name: 'board', defaultValue: 'intel-a10soc-devkit', description: 'FPGA board to target')
-    }
-	stages {
-		stage('Build') {
-			node {
-    	        steps {
-					sh '''
-						BOARD=${params.board}
-		                echo "Building for $BOARD"
-						source /local/ecad/setup.bash 18.1std
-						make $BOARD
-					'''
-				}
-            }
-        }
-    }
+# based on
+# https://support.cloudbees.com/hc/en-us/articles/115000088431-Create-a-Matrix-like-flow-with-Pipeline
+
+def boards = [ "intel-a10soc-devkit", "enclustra-mercury-aa1-pe1" ]
+def tasks = [:]
+
+for(int i=0; i < boards.size(); i++) {
+	def boardValue = boards[i]
+	tasks["${boardValue}"] = {
+		node {
+			def board = boardValue
+			println "Building for ${board}"
+			println "Node=${env.NODE_NAME}"
+		}
+	}
+}
+
+stage ("Matrix") {
+	parallel tasks
 }
