@@ -11,6 +11,10 @@ for(int i=0; i < boards.size(); i++) {
 			def board = boardValue
 			println "Building for ${board}"
 			println "Node=${env.NODE_NAME}"
+			sh '''
+				source /local/ecad/setup.sh 18.1std
+				make ${board}
+			'''
 		}
 	}
 }
