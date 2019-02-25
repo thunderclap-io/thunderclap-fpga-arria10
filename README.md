@@ -1,11 +1,15 @@
-This is an Arria 10 SoC FPGA design for the Arria 10 SoC development kit.
-PCIe TLPs are available on pipes in the ARM memory space.
+# Thunderclap FPGA hardware platform
 
-The A10SoCDK is connected to PCIe via an FMC to PCIe cable in socket FMCB. 
+This repository contains the FPGA design for the Thunderclap platform, as run on two Arria 10 boards:
+
+* The Intel Arria 10 SoC Development Kit, connected to PCIe via an FMC to PCIe cable in socket FMCB.
 (This cable is a Samtec HDR-181157-01-PCIEC, special/made to order for about
 $200 in 1 off from Samtec direct)
+* The Enclustra Mercury AA1+ board in a PE1 carrier board (probably PE1-200 - still work in progress)
 
-# Memory map:
+Architecturally, the system consists of the hard Arm Cortex A9 CPU, with a PCI Express IP core in the FPGA logic.  The IP core is connected to the Arm via simple polled pipes that deliver raw PCI Express packets (TLPs).  Software reads/writes these pipes and parses the PCIe messages, and is able to generated arbitrary packets on PCIe.  All this is software-defined, there is at present no acceleration for PCIe packet generation.
+
+## Memory map:
 
 ```
     HPS2FPGA bridge base:  0xC0000000
@@ -29,7 +33,7 @@ $200 in 1 off from Samtec direct)
       Latency Counter      0xFF200100
 ```
 
-# PCIe packet pipes
+## PCIe packet pipes
 
 Each pipe is 32 bits wide and receives 64 bit data in two pieces:
 
@@ -55,27 +59,26 @@ will re-enable the PCIe core.  The hard IP is hardwired to the PCIE_PERST
 reset line - ie it appears the PIO will only reset PCIe logic but not the
 transceivers.
 
-# Building the FPGA via Quartus GUI
+The pipe logic is written in BSV (Bluespec System Verilog), however generated Verilog sources are also provided.
 
-Tested with Quartus 17.1 standard (not Lite or Pro).  Needs BSV compiler:
+# Building the FPGA
 
-1. 
-```
-make -C pcie-bsv/bsv/MMRingBuffer
-```
-2. Open in Qsys/Platform Designer:
-```
-qsys-edit ghrd_10as066n2.qsys
-```
-3. Press the Generate HDL... button
-4. Open in Quartus:
-```
-quartus ghrd_10as066n2 &
-```
-5. Processing -> Start Compilation
+Assuming Intel Quartus is on your PATH (tested with versions 17.1 standard and 18.1 standard), from the top level run:
 
+```
+make intel-a10soc-devkit
+```
+
+or
+```
+make enclustra-mercury-aa1-pe1
+```
+
+(once the first build is run, you can also open the projects in the `boards` directory in the Quartus GUI)
 
 # Building the SD card image
+
+(scripted version still work in progress)
 
 First build your FPGA bitfile with Quartus.  Then fetch and build the
 necessary components to generate a suitable SD card (requires sudo and
@@ -85,10 +88,10 @@ Quartus's embedded tools installed):
 sudo whoami # prompt early so we aren't interrupted
 export SOCEDS_DEST_ROOT=$QUARTUS_ROOTDIR/../embedded
 . $SOCEDS_DEST_ROOT/env.sh
-git clone https://github.com/CTSRD-CHERI/pcie-probe-software.git
+git clone https://github.com/thunderclap-io/thunderclap-qemu.git
 mkdir sdcard
 cd sdcard
-../pcie-probe-software/scripts/socfpga/build_ubuntu_sdcard.sh ../pcie-fpga-arria10-socdevkit ghrd_10as066n2
+../thunderclap-qemu/scripts/socfpga/build_ubuntu_sdcard.sh ../thunderclap-fpga-arria10 ghrd_10as066n2
 ```
 
 You may need to install Ubuntu package libssl-dev to build the Linux kernel.
