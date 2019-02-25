@@ -1,6 +1,6 @@
 # Thunderclap FPGA hardware platform
 
-This repository contains the FPGA design for the Thunderclap platform, as run on two Arria 10 boards:
+This repository contains the FPGA design for the [Thunderclap platform](https://thunderclap.io/), as run on two Arria 10 boards:
 
 * The Intel Arria 10 SoC Development Kit, connected to PCIe via an FMC to PCIe cable in socket FMCB.
 (This cable is a Samtec HDR-181157-01-PCIEC, special/made to order for about
