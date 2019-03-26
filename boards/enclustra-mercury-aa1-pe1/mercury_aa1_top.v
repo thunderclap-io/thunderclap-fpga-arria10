@@ -322,10 +322,14 @@ module mercury_aa1_top (
 	reg [23:0]	LedCount;
 	reg 		Rst;
 	wire		h2f_reset_n;
-	wire clk200;
+	wire     clk200;
+	wire     clk100ext;			// 100MHz external clock generator on plugin module
+	wire     clkusr;				// 100MHz transceiver configuration clock
 
     system u0 (
+		.clk100_clk                       (clk100ext),                    // main I/O clock
 		.clk200_clk                       (clk200),                       //                     clk200.clk
+		.reset_reset_n                    (!Rst),
 		.emif_a10_hps_0_mem_mem_ck        (emif_a10_hps_0_mem_mem_ck),        //         emif_a10_hps_0_mem.mem_ck
 		.emif_a10_hps_0_mem_mem_ck_n      (emif_a10_hps_0_mem_mem_ck_n),      //                           .mem_ck_n
 		.emif_a10_hps_0_mem_mem_a         (emif_a10_hps_0_mem_mem_a),         //                           .mem_a
@@ -399,15 +403,17 @@ module mercury_aa1_top (
 
         .streams_0_pcie_ep_0_hip_serial_rx_in0   (PCIE_RX_p[0]),   // streams_0_pcie_ep_0_hip_serial.rx_in0
         .streams_0_pcie_ep_0_hip_serial_tx_out0  (PCIE_TX_p[0]),  //                               .tx_out0
-        .streams_0_pcie_ep_0_pcie_rstn_npor      (1'b1),      //  streams_0_pcie_ep_0_pcie_rstn.npor
+        .streams_0_pcie_ep_0_pcie_rstn_npor      (!Rst),      //  streams_0_pcie_ep_0_pcie_rstn.npor
         .streams_0_pcie_ep_0_pcie_rstn_pin_perst (IO_B2A_L19_AB11_PERST_P_n), //                               .pin_perst
         .streams_0_pcie_ep_0_refclk_clk          (PCIE_REFCLK_p),           //     streams_0_pcie_ep_0_refclk.clk
-       .reset_bridge_0_out_reset_reset_n        (h2f_reset_n)         //       reset_bridge_0_out_reset.reset_n
+       .reset_bridge_0_out_reset_reset_n        (h2f_reset_n),         //       reset_bridge_0_out_reset.reset_n
  
 		);
 
     assign PERST_n = IO_B2A_L19_AB11_PERST_P_n;
-    assign IO_B2A_L18_Y16_P = PCIE_REFCLK_p;
+    //assign IO_B2A_L18_Y16_P = PCIE_REFCLK_p;
+	 assign clkusr = IO_B2A_L18_Y15_N;
+	 assign clk100ext = IO_B2A_L12_CLK1_AG15_N;
 
 
     always @(posedge clk200) begin
@@ -420,7 +426,7 @@ module mercury_aa1_top (
     end
 
 
-    always @(posedge clk200) begin
+    always @(posedge clk100ext) begin
 	if (Rst == 1) begin
 		LedCount <= 0;
 	end else begin
