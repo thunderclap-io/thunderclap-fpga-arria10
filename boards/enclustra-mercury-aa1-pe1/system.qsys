@@ -338,7 +338,7 @@
   <parameter name="S2FINTERRUPT_USB0_Enable" value="false" />
   <parameter name="S2FINTERRUPT_USB1_Enable" value="false" />
   <parameter name="S2FINTERRUPT_WATCHDOG_Enable" value="false" />
-  <parameter name="S2F_Width" value="4" />
+  <parameter name="S2F_Width" value="2" />
   <parameter name="SDMMC_Mode" value="4-bit" />
   <parameter name="SDMMC_PinMuxing" value="IO" />
   <parameter name="SDMMC_REF_CLK" value="200" />
