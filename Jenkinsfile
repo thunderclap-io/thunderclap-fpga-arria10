@@ -17,7 +17,7 @@ for(int i=0; i < boards.size(); i++) {
 				ls -l
 				make ${board}
 			'''
-			archiveArtifacts "boards/${board}/output_files/*.sof,boards/${board}/output_files/*.rbf,boards/${board}/output_files/*.rpt,boards/${board}/*.qsys,boards/${boards}/*.sopcinfo,boards/${boards}/hps_isw_handoff/*"
+			archiveArtifacts "boards/${board}/output_files/*.sof,boards/${board}/output_files/*.rbf,boards/${board}/output_files/*.rpt,boards/${board}/*.qsys,boards/${board}/*.sopcinfo,boards/${board}/hps_isw_handoff/*"
 		}
 	}
 }
