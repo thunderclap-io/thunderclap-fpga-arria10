@@ -1,0 +1,5 @@
+<BoardInfo pov="arria10_hps_0_arm_a9_0">
+
+<DTAppend name="enable-method" type="string" parentpath="/cpus" val="altr,socfpga-a10-smp"/>
+
+</BoardInfo>
